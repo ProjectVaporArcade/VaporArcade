@@ -6,15 +6,13 @@ VaporRectangle
 	id: emuSettingsContainer
 	scalable: false
 	pressable: false
-	zScalable: false
-	anchors.verticalCenter: settingsContainer.verticalCenter
-	anchors.horizontalCenter: settingsContainer.horizontalCenter
-	anchors.horizontalCenterOffset: 35
-	z: settingsContainer.z + 1
+    zScalable: false
+    anchors.horizontalCenterOffset: 0
+    z: settingsContainer.z + 1
 	color: vaporTheme.base
-	height: settingsContainer.height * 0.95
-	width: (settingsContainer.width - navigationTabContainer.width) * 0.95
-	border.width: 8
+    height: settingsContainer
+    width: settingsContainer.width
+    border.width: 2
 	border.color: vaporTheme.shadow
 	radius: 9
 	focus: false
@@ -50,5 +48,4 @@ VaporRectangle
 			event.accepted = true;
 		}
 	}
-
 }

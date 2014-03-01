@@ -4,12 +4,12 @@ VaporRectangle
 {
 	id: tabContainer
 	color: selected ? vaporTheme.dark : vaporTheme.mid
-	visible: true
-	scalable: false
-	pressable: true
+    visible: true
+    scalable: false
+    pressable: true
 	focus: false
 
-	border.width: 8
+    border.width: 4
 	border.color: vaporTheme.shadow
 
 	radius: 9
@@ -22,7 +22,7 @@ VaporRectangle
 		id: tabLabel
 		anchors.centerIn: parent
 		font.pointSize: 16
-		color: vaporTheme.light
+        color: parent.focus? vaporTheme.selectedText : vaporTheme.text
 		rotation: -90
 		text: tabText
 	}

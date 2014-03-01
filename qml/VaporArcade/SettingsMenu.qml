@@ -1,244 +1,154 @@
 import QtQuick 2.0
 
-
 VaporRectangle
 {
 	id: settingsContainer
 	width: homescreen.width
 	height: homescreen.height
 	color: vaporTheme.base
+    pressable:true
 	visible: false
 	z: parent.z + 1
+    readonly property int tabCount: 4
+    property var tabs: [ appTab, gameLibTab, emuTab, contTab ]
+    property var tabViews: [ appSettings, gameLibManager, contSettings, emuSettings]
+    property int currentTab: 0
 
-	property string currentTab: ""
+    function setTab(tabNum)
+    {
+        tabViews[currentTab % tabCount].visible=false
+        tabs[currentTab % tabCount].openTab=false;
+        if(tabNum < 0)
+            currentTab=tabCount-1
+        else if (tabNum >= tabCount)
+            currentTab=0
+        else
+            currentTab=tabNum % tabCount
+        console.debug(currentTab)
+        tabs[currentTab % tabCount].focus=true
+        tabViews[currentTab % tabCount].visible=true
+    }
 
-	function setDefaultFocus (setTab)
+    function setDefaultFocus ()
 	{
-		navigationTabContainer.focus = true;
-		if (setTab == "app")
-		{
-			appTab.openTab = true;
-		}
-		else if (setTab == "emu")
-		{
-			emuTab.openTab = true;
-		}
-		else if (setTab == "cont")
-		{
-			contTab.openTab = true;
-		}
-		currentTab = setTab;
-	}
 
+        //navigationTabContainer.focus = true;
+        //currentTab = setTab;
+        visible=true
+        tabs[currentTab].openTab = true
+        setTab(currentTab)
+	}
+    Keys.onPressed:
+    {
+        if(event.key == Qt.Key_Down)
+        {
+            setTab(currentTab+1)
+        }
+        else if(event.key == Qt.Key_Up)
+        {
+            setTab(currentTab-1)
+        }else if (event.key == Qt.Key_Backspace)
+        {
+            resetTabSelection();
+            settingsContainer.visible = false;
+            homescreen.setDefaultFocus();
+            event.accepted = true;
+        }
+    }
 	Image
 	{
-		id: lobbyBackground
+        id: tabsView
 		source: "./vaporBackground.jpg"
 		anchors.left: navigationTabContainer.right
 		height: parent.height
 		width: parent.width - navigationTabContainer.width
-		opacity: 0.2
 	}
-
 	//define settings interfaces
-	ApplicationSettings
-	{
-		id: appSettings
-		visible: false
-		focus: false
 
-		KeyNavigation.left: navigationTabContainer
-		KeyNavigation.right: navigationTabContainer
-	}
-
-	ControllerSettings
-	{
-		id: contSettings
-		visible: false
-		focus: false
-
-		KeyNavigation.left: navigationTabContainer
-		KeyNavigation.right: navigationTabContainer
-	}
-
-	EmulatorSettings
-	{
-		id: emuSettings
-		visible: false
-		focus: false
-
-		KeyNavigation.left: navigationTabContainer
-		KeyNavigation.right: navigationTabContainer
-	}
-
-	VaporRectangle
+    Rectangle
 	{
 		id: navigationTabContainer
-		height: parent.height
+        clip:false
+        property int navTabHeight: height / tabCount * 32/33
+        height: parent.height
 		width: parent.width * 0.05
 		anchors.left: parent.left
-		color: vaporTheme.alternateBase
+        color: "transparent"
 		focus: false
 		radius: 9
-
-		scalable: false
-		pressable: false
-
-		Keys.onReturnPressed: appTab.focus = true;
 
 		Column
 		{
 			id: navigationTabPositioner
 			anchors.fill: parent
-
-			VaporVerticalTab
-			{
-				id: appTab
-				height: parent.height / 3
-				width: parent.width
-				tabText: "Application Settings"
-
-				KeyNavigation.down: emuTab
-				KeyNavigation.up: contTab
-				KeyNavigation.right: appSettings
-
-				Keys.onPressed:
-				{
-					if (event.key == Qt.Key_Return)
-					{
-						focus = false;
-						appTab.openTab = true;
-						currentTab = "app";
-						appSettings.setDefaultFocus();
-						emuTab.openTab = false;
-						contTab.openTab = false;
-						event.accepted = true;
-					}
-					else if (event.key == Qt.Key_Backspace)
-					{
-						focus = false;
-						navigationTabContainer.focus = true;
-						event.accepted = true;
-					}
-				}
-			}
-			VaporVerticalTab
-			{
-				id: emuTab
-				height: parent.height / 3
-				width: parent.width
-				tabText: "Emulator Settings"
-
-				KeyNavigation.up: appTab
-				KeyNavigation.down: contTab
-
-				Keys.onPressed:
-				{
-					if (event.key == Qt.Key_Return)
-					{
-						focus = false;
-						appTab.openTab = false;
-						emuTab.openTab = true;
-						currentTab = "emu";
-						emuSettings.setDefaultFocus();
-						contTab.openTab = false;
-						event.accepted = true;
-					}
-					else if (event.key == Qt.Key_Backspace)
-					{
-						focus = false;
-						navigationTabContainer.focus = true;
-						event.accepted = true;
-					}
-				}
-			}
-			VaporVerticalTab
-			{
-				id: contTab
-				height: parent.height / 3
-				width: parent.width
-				tabText: "Controller Settings"
-
-				KeyNavigation.up: emuTab
-				KeyNavigation.down: appTab
-
-				Keys.onPressed:
-				{
-					if (event.key == Qt.Key_Return)
-					{
-						focus = false;
-						appTab.openTab = false;
-						emuTab.openTab = false;
-						contTab.openTab = true;
-						currentTab = "cont";
-						contSettings.setDefaultFocus();
-						event.accepted = true;
-					}
-					else if (event.key == Qt.Key_Backspace)
-					{
-						focus = false;
-						navigationTabContainer.focus = true;
-						event.accepted = true;
-					}
-				}
-			}
+            clip:false
+            VaporVerticalTab
+            {
+                id: appTab
+                height: navigationTabContainer.navTabHeight
+                width: navigationTabContainer.width
+                tabText: "Application Settings"
+            }
+            VaporVerticalTab
+            {
+                id: gameLibTab
+                height: navigationTabContainer.navTabHeight
+                width: navigationTabContainer.width
+                tabText: "Library Manager"
+            }
+            VaporVerticalTab
+            {
+                id: emuTab
+                height:navigationTabContainer.navTabHeight
+                width: navigationTabContainer.width
+                tabText: "Emulator Settings"
+            }
+            VaporVerticalTab
+            {
+                id: contTab
+                height: navigationTabContainer.navTabHeight
+                width: navigationTabContainer.width
+                tabText: "Controller Settings"
+            }
 		}
 	}
+    ApplicationSettings
+    {
+        id: appSettings
+        visible: false
+        focus: false
+        anchors.fill: tabsView
+    }
+
+    ControllerSettings
+    {
+        id: contSettings
+        visible: false
+        focus: false
+        anchors.fill: tabsView
+    }
+
+    EmulatorSettings
+    {
+        id: emuSettings
+        visible: false
+        focus: false
+        anchors.fill: tabsView
+    }
+    GameLibraryManager
+    {
+        id: gameLibManager
+        visible: false
+        focus: false
+        anchors.fill: tabsView
+    }
 
 	function resetTabSelection()
 	{
 		appTab.openTab = false;
 		emuTab.openTab = false;
 		contTab.openTab = false;
-		currentTab = "";
-	}
-
-	onCurrentTabChanged:
-	{
-//		console.log(currentTab);
-		switch (currentTab)
-		{
-//		case "app":
-//			appSettings.visible = true;
-//			appSettings.focus = true;
-//			emuSettings.visible = false;
-//			contSettings.visible = false;
-//			break;
-//		case "emu":
-//			emuSettings.visible = true;
-//			emuSettings.focus = true;
-//			appSettings.visible = false;
-//			contSettings.visible = false;
-//			break;
-//		case "cont":
-//			contSettings.visible = true;
-//			contSettings.focus = true;
-//			appSettings.visible = false;
-//			emuSettings.visible = false;
-//			break;
-		default:
-			appSettings.visible = false;
-			emuSettings.visible = false;
-			contSettings.visible = false;
-			appSettings.focus = false;
-			emuSettings.focus = false;
-			contSettings.focus = false;
-			break;
-		}
-	}
-
-	Keys.onPressed:
-	{
-		if (event.key == Qt.Key_Return)
-		{
-
-		}
-		else if (event.key == Qt.Key_Backspace)
-		{
-			resetTabSelection();
-			settingsContainer.visible = false;
-			homescreen.setDefaultFocus();
-			event.accepted = true;
-		}
+        gameLibTab.openTab = false;
+        currentTab = 0;
 	}
 }

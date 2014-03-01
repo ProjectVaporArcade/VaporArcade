@@ -105,7 +105,7 @@ void EmulatorSettingsReader::ProcessSettingsData(const QString& rawData)
     foreach (const QString categoryIn, categories)
     {  
         QStringList settings(categoryIn.split("'}), '"));
-        QString category(settings[0].split(': {')[0].remove("'").remove("{"));
+        QString category(settings[0].split(": {")[0].remove("'").remove("{"));
         foreach (const QString settingIn, settings)
         {
             settings.length();

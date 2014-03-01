@@ -1,5 +1,4 @@
 import QtQuick 2.0
-//import com.vapor.project 1.0
 
 VaporRectangle
 {
