@@ -10,32 +10,25 @@ VaporRectangle
 	visible: false
 	z: parent.z + 1
     readonly property int tabCount: 4
-    property var tabs: [ appTab, gameLibTab, emuTab, contTab ]
-    property var tabViews: [ appSettings, gameLibManager, contSettings, emuSettings]
+    property var tabs:      [ appTab,       gameLibTab,     emuTab,         contTab     ]
+    property var tabViews:  [ appSettings,  gameLibManager, emuSettings,    contSettings]
     property int currentTab: 0
 
     function setTab(tabNum)
     {
-        tabViews[currentTab % tabCount].visible=false
-        tabs[currentTab % tabCount].openTab=false;
+        resetTabSelection()
         if(tabNum < 0)
             currentTab=tabCount-1
-        else if (tabNum >= tabCount)
-            currentTab=0
         else
             currentTab=tabNum % tabCount
-        console.debug(currentTab)
-        tabs[currentTab % tabCount].focus=true
+        tabs[currentTab].openTab = true
         tabViews[currentTab % tabCount].visible=true
     }
 
     function setDefaultFocus ()
-	{
-
-        //navigationTabContainer.focus = true;
-        //currentTab = setTab;
+    {
+        resetTabSelection()
         visible=true
-        tabs[currentTab].openTab = true
         setTab(currentTab)
 	}
     Keys.onPressed:
@@ -47,6 +40,9 @@ VaporRectangle
         else if(event.key == Qt.Key_Up)
         {
             setTab(currentTab-1)
+        }else if(event.key == Qt.Key_Return)
+        {
+            tabViews[currentTab].setDefaultFocus()
         }else if (event.key == Qt.Key_Backspace)
         {
             resetTabSelection();
@@ -66,8 +62,9 @@ VaporRectangle
 	//define settings interfaces
 
     Rectangle
-	{
+    {
 		id: navigationTabContainer
+        z:tabsView.z+2
         clip:false
         property int navTabHeight: height / tabCount * 32/33
         height: parent.height
@@ -85,6 +82,7 @@ VaporRectangle
             VaporVerticalTab
             {
                 id: appTab
+                focus:openTab
                 height: navigationTabContainer.navTabHeight
                 width: navigationTabContainer.width
                 tabText: "Application Settings"
@@ -92,6 +90,7 @@ VaporRectangle
             VaporVerticalTab
             {
                 id: gameLibTab
+                focus:openTab
                 height: navigationTabContainer.navTabHeight
                 width: navigationTabContainer.width
                 tabText: "Library Manager"
@@ -99,6 +98,7 @@ VaporRectangle
             VaporVerticalTab
             {
                 id: emuTab
+                focus:openTab
                 height:navigationTabContainer.navTabHeight
                 width: navigationTabContainer.width
                 tabText: "Emulator Settings"
@@ -106,6 +106,7 @@ VaporRectangle
             VaporVerticalTab
             {
                 id: contTab
+                focus:openTab
                 height: navigationTabContainer.navTabHeight
                 width: navigationTabContainer.width
                 tabText: "Controller Settings"
@@ -115,40 +116,55 @@ VaporRectangle
     ApplicationSettings
     {
         id: appSettings
-        visible: false
+        visible: appTab.openTab
         focus: false
         anchors.fill: tabsView
+        height: tabsView.height
+        width: tabsView.width
+        z:tabsView.z+1
     }
 
     ControllerSettings
     {
         id: contSettings
-        visible: false
+        visible: contTab.openTab
         focus: false
         anchors.fill: tabsView
+        height: tabsView.height
+        width: tabsView.width
+        z:tabsView.z+1
     }
 
     EmulatorSettings
     {
         id: emuSettings
-        visible: false
+        visible: emuTab.openTab
         focus: false
         anchors.fill: tabsView
+        height: tabsView.height
+        width: tabsView.width
+        z:tabsView.z+1
     }
     GameLibraryManager
     {
         id: gameLibManager
-        visible: false
+        visible: gameLibTab.openTab
         focus: false
         anchors.fill: tabsView
+        height: tabsView.height
+        width: tabsView.width
+        z:tabsView.z+1
     }
 
 	function resetTabSelection()
 	{
 		appTab.openTab = false;
+        appSettings.visible=appTab.openTab
 		emuTab.openTab = false;
+        emuSettings.visible = emuTab.openTab
 		contTab.openTab = false;
+        contSettings.visible = contTab.openTab
         gameLibTab.openTab = false;
-        currentTab = 0;
+        gameLibManager.visible = gameLibTab.openTab
 	}
 }

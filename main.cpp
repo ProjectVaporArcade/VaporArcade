@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
         screen_width = screen->availableGeometry().width();
         screen_height = screen->availableGeometry().height();
     }
+    viewer.rootContext()->setContextProperty("DefaultDirectory", viewer.engine()->offlineStoragePath());
     viewer.rootContext()->setContextProperty("ScreenWidth", screen_width);
     viewer.rootContext()->setContextProperty("ScreenHeight", screen_height);
     viewer.rootContext()->setContextProperty("AppSettings", &settings);

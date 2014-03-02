@@ -10,3 +10,12 @@ QStringList EmulatorServices::getSysEmus()
     }
     return emuSystems;
 }
+void EmulatorServices::startGame(const QString & exeCmd, const QString & game)
+{
+    QString tmp = mSettingsReader.ReadEmuLaunchCommand(exeCmd);
+    qDebug() << tmp + game;
+    if(exeCmd != "" && QFile::exists(game))
+    {
+        mEmulatorCore.start(mSettingsReader.ReadEmuLaunchCommand(exeCmd), "\"" + game + "\"");
+    }
+}

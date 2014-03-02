@@ -24,14 +24,13 @@ class EmulatorServices: public QObject
 public:
     EmulatorServices(QObject* parent = nullptr):QObject(parent){}
     ~EmulatorServices(){}
-    Q_INVOKABLE void start(QString system,QString emuFile, QString game){mEmulatorCore.loadEmulator(mEmulatorDir + "/" + system,emuFile, mRomsDir + "/" +game);}
-    Q_INVOKABLE void start(const QString & system, const QString & game){mEmulatorCore.start(mEmulatorDir + "/" + system,mRomsDir + "/" +game);}
+    Q_INVOKABLE void start(const QString & emuPy, const QString & game){startGame(emuPy, game);}
     Q_INVOKABLE void setRomsDir(const QString& RomsDir){ mRomsDir = RomsDir;}
-    Q_INVOKABLE void setPythonInterpreter(const QString& py){mEmulatorCore.setPythonInterpreter(py);};
+    Q_INVOKABLE void setPythonInterpreter(const QString& py){mEmulatorCore.setPythonInterpreter(py);mSettingsReader.setPythonInterpreter(py);}
     Q_INVOKABLE void setEmulatorSystemDir(const QString& EmuDir){mEmulatorDir = EmuDir;}
     Q_INVOKABLE void stop(){mEmulatorCore.stop();}
     Q_INVOKABLE QStringList getEmulators(){return getSysEmus();}
-    Q_INVOKABLE void readSettings(QString system, QString emuPyFile){mSettingsReader.ReadSettings(mEmulatorDir + "/" + system, emuPyFile);}
+    Q_INVOKABLE void readSettings(QString emuPyFile){mSettingsReader.ReadSettings(emuPyFile);}
     Q_INVOKABLE void writeSettings(/*QString system, QString emuPyFile, SettingsHash settings*/){qDebug() << "FooBar";}
 signals:
     void MultipleEmulatorsFound(QStringList emuList);
@@ -40,6 +39,7 @@ signals:
     void SettingsLoaded(SettingsHash hash);
     void SettingsSaved();
 private:
+    void startGame(const QString & emuPy, const QString & game);
     QStringList getSysEmus();
     QString mEmulatorDir;
     QString mRomsDir;

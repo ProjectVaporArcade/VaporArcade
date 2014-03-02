@@ -6,6 +6,7 @@
 #include <QString>
 #include <QProcess>
 #include <QDebug>
+#include "EmulatorSettingsReader.h"
 /******************************************************************************
 * Class:        EmulatorCore
 * Author:       Aaron Lindberg
@@ -23,8 +24,8 @@ class EmulatorCore: public QObject
 public:
     EmulatorCore(QObject* parent = nullptr);
     ~EmulatorCore();
-    bool loadEmulator(QString system,QString Emu, QString game);
-    void start(const QString & system, const QString & game);
+    //bool loadEmulator(QString Emu, QString game);
+    void start(const QString & emuPy, const QString & game);
     void setRomsDir(const QString& RomsDir);
     void setEmulatorSystemDir(const QString& EmuDir);
     void setPythonInterpreter(const QString& py);
@@ -37,9 +38,8 @@ signals:
     void BadPyDataProcessed();
 public slots:
     void emuError(QProcess::ProcessError status);
-    void emuStopped(int);
-    int stop(int status = 0);
-    void processLauncherData();
+    void emuStopped(int, QProcess::ExitStatus);
+    int stop(int status = 0, QProcess::ExitStatus etc = QProcess::NormalExit);
 private:
     QProcess* mProcess;
     QString mRomsDir;

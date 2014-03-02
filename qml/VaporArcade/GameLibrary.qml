@@ -19,12 +19,6 @@ GridView {
     Component {
         id: gameDelegate
         VaporRectangle {
-            /*property string gameName: name
-            property string romName: game
-            property string sysFullName:sysFull
-            property string sysAbbrName: sysAbbr
-            property string descrip : desc
-            property string disp: display*/
             id: wrapper
             onActiveFocusChanged: {
                 if(focus == true)

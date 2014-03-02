@@ -10,58 +10,7 @@ EmulatorCore::EmulatorCore(QObject* parent):QObject(parent),
 ******************************************************************************/
 EmulatorCore::~EmulatorCore()
 {stop();}
-/******************************************************************************
-*	loadEmulator
-*** OVERVIEW **
-* 	Loads a specific emulator system python with a game.
-*** INPUT **
-*   Takes a string of the emulator system type, the emulator python file name,
-* and the path to the game to load after system information is gathered.
-*** OUTPUT **
-*   Returns a boolean value. If the emulator is python file was started with
-* python true is returned, however in the event that the python file could not
-* be started the return value is false.
-******************************************************************************/
-bool EmulatorCore::loadEmulator(QString system,QString Emu, QString game)
-{
-    QString loadEmu(mEmulatorDir+ '/' + system + '/' + Emu);
 
-    qDebug() << loadEmu;
-    bool ret(false);//Return value
-    if(mProcess)//Check for a running process
-    {
-        qDebug() << "already Running";
-    }
-    else if((ret = QFile(loadEmu).exists()))//check if the python file exists
-    {
-        //check if the python interpreter is installed
-        if((ret = QFile(mPythonInterpreter).exists()))
-        {
-    //update last played system and game to start after launcher configuration
-            mLastPlayedGame = game;
-            mLastPlayedSystem = system;
-            mProcess = new QProcess;
-            mProcess->setProcessChannelMode(QProcess::MergedChannels);
-            connect(mProcess,SIGNAL(readyRead()),this,SLOT(processLauncherData()));
-            try
-            {
-                qDebug() << "System Loading using "+ mPythonInterpreter +" \"" + loadEmu + "\"";
-                mProcess->start(mPythonInterpreter+" \"" + loadEmu + "\"");
-                emit EmulatorStarted(mLastPlayedSystem,mLastPlayedGame);
-            }catch (const QException& etc)
-            {
-                qDebug() << etc.what();
-            }
-        }else
-        {
-            qDebug() << "Unable to find python interpreter @ " + mPythonInterpreter;
-        }
-    }else
-    {
-        qDebug() << "Unable to Locate the python file @\"" + loadEmu + "\"";
-    }
-    return ret;//indicate if the launcher configuration is started
-}
 /******************************************************************************
 *	start
 *** OVERVIEW **
@@ -72,52 +21,17 @@ bool EmulatorCore::loadEmulator(QString system,QString Emu, QString game)
 *** OUTPUT ***
 *   On completion of loading emulator launcher configuration
 ******************************************************************************/
-void EmulatorCore::start(const QString & system, const QString & game)
+void EmulatorCore::start(const QString & emuPy, const QString & game)
 {
-    //check is the process exists
-    if(mProcess != nullptr)
+
+    if(mProcess == nullptr)
     {
-        //check if the process is running
-        if(mProcess->state() == QProcess::Running)
-            qDebug("Process Already Running!");
-        else
-        {//clean the proess if it is not running
-            delete mProcess;
-            mProcess = nullptr;
-        }
-    }//check if there is no process being used
-   if(mProcess == nullptr)
-    {//create new process
-        //filter emulator core scripts
-        QStringList filters;
-        filters.append("*.py");
-        //look for emulator core scripts
-        QDir loadEmu(mEmulatorDir + QDir::separator() + system + QDir::separator());
-        //get a list of emulator core script files
-        QStringList emuList = loadEmu.entryList(filters);
-        //check if there are emulator cores
-        if(emuList.isEmpty())
-        {
-            emit NoEmulatorsFound(loadEmu.path());
-            if(!loadEmu.exists())
-                qDebug() << "Unable to find python emulator system configuration files @ " << loadEmu.path();
-        }
-        else if (emuList.count() == 1)
-        {//get core information if ther is only one result
-            loadEmulator(system,emuList.first(),game);
-        }
-        else
-        {//if there are multiple core scripts give a list of all cores found
-            QStringList emus;
-            foreach(QString str, emuList)
-            {
-               emus.append(str.replace(".py",""));
-            }
-            //emit a signal that multiple emulators were found
-            qDebug() << "Multiple emulator system configuration python files found";
-            emit MultipleEmulatorsFound(emus);
-        }
-    }
+        mProcess = new QProcess;
+        connect(mProcess,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(stop(int,QProcess::ExitStatus)) );
+        qDebug() << emuPy + game;
+        mProcess->start(emuPy + game);
+    }else
+        qDebug() << mProcess->program();
 }
 /******************************************************************************
 *	setRomsDir
@@ -145,11 +59,11 @@ void EmulatorCore::setPythonInterpreter(const QString& py)
 {
     mPythonInterpreter=py;
 }
-void EmulatorCore::emuStopped(int status)
+void EmulatorCore::emuStopped(int status, QProcess::ExitStatus etc)
 {
     emit EmulatorStopped();
     qDebug() << "Emulator " + mLastPlayedSystem + " Stopped Playing " + mLastPlayedGame;
-    stop(status);
+    stop(status, etc);
 }
 void EmulatorCore::emuError(QProcess::ProcessError status)
 {
@@ -166,89 +80,26 @@ void EmulatorCore::emuError(QProcess::ProcessError status)
 *** OUTPUT **
 *   Return the exit code.
 ******************************************************************************/
-int EmulatorCore::stop(int status)
+int EmulatorCore::stop(int status, QProcess::ExitStatus etc)
 {
-    if(mProcess != nullptr)
-    {
+        if(mProcess != nullptr)
+        {
+            mProcess->disconnect();
+            mProcess->close();
+            mProcess->waitForFinished(0);
+            QProcess::ProcessState state = mProcess->state();
+            if(state != QProcess::NotRunning)
+            {
+                if(mProcess->error() == QProcess::Timedout)
+                do
+                {
+                    mProcess->kill();
+                    mProcess->waitForFinished(3000);
+                }while(mProcess->state() != QProcess::NotRunning);
+            }
+            delete mProcess;
+            mProcess = nullptr;
 
-        mProcess->disconnect();
-        mProcess->close();
-        mProcess->waitForFinished(3000);
-        delete mProcess;
-        mProcess = nullptr;
-    }
+        }
     return status;
-}
-/******************************************************************************
-*	processLauncherData
-*** OVERVIEW **
-* 	Process the data read from the python script, and starts the emulator with
-* the game fed to start or load.
-******************************************************************************/
-void EmulatorCore::processLauncherData()
-{
-    QString str (mProcess->readAll());
-    qDebug() << str;
-    //check if the python file gave bad data
-    if(!str.startsWith("$%$"))
-    {
-        emit BadPyDataProcessed();
-        qDebug() << "Python File is not in the correct format.";
-    }
-    else
-    {//format the data and propigate fields
-        QStringList dataIn (str.split('\n'));
-        if(dataIn.length() < 3)
-        {
-            qDebug() << "Error - Python file didn't contain enough data or in a bad format.";
-            emit BadPyDataProcessed();
-        }
-        else
-        {
-            QString launcher = dataIn[1].split('=').last();
-            qDebug() << launcher << " : " << QFile(launcher).exists();
-            QStringList Arg(dataIn[2].split('=').last().split("\""));
-            if(Arg.length() <= 1)
-            {
-                qDebug() << "Arguments are Empty";
-                mArguments = "";
-            }else
-            {
-                mArguments = Arg[1];
-            }
-            QString build (launcher+ " " + (mArguments.length()>0?mArguments + " ":"") + "\"" + /*mRomsDir + "/" +*/ mLastPlayedGame + "\"");
-            qDebug() << "Trying to starting the process with string" << build;
-            this->stop(0);
-            if(QFile(launcher.split("\"")[1]).exists())
-            {
-                if(QFile(/*mRomsDir + "/" +*/ mLastPlayedGame).exists())
-                {
-                    mProcess = new QProcess;
-                    connect(mProcess,SIGNAL(finished(int)),this,SLOT(emuStopped(int)));
-                    connect(mProcess,SIGNAL(error(QProcess::ProcessError)),this,SLOT(emuError(QProcess::ProcessError)));
-                    try
-                    {
-                        qDebug() << build;
-                        mProcess->start(build);
-                        emit EmulatorStarted(mLastPlayedSystem,mLastPlayedGame);
-                        qDebug() << "Emulator " + mLastPlayedSystem + " Started Playing " + mLastPlayedGame;
-                    }catch(const QException& exc)
-                    {
-                        qDebug() << exc.what();
-                    }
-                }
-                else
-                {
-                    qDebug() << "Error - A emulator for " + mLastPlayedSystem
-                                + " failed to find the game to launch @ \""
-                                + mRomsDir + "/" + mLastPlayedGame + "\"";
-                }
-            }else
-            {
-                qDebug() << "Error - Unable to find the emulator core "
-                            + launcher + " specified by the python file";
-            }
-
-        }
-    }
 }

@@ -150,11 +150,11 @@ function testInserts()
     insertMediaType("SPINE");
     insertGameSystem("Super Nintendo Entertainment System", "SNES","/Dropbox/My Qt/JP Stuff/JP Stuff For Eli And Aaron/VaporRevamp/VaporRevamp/Emulator/SNES/SNES.png");
     insertGameSystem("Nintendo 64", "N64","/Dropbox/My Qt/JP Stuff/JP Stuff For Eli And Aaron/VaporRevamp/VaporRevamp/Emulator/N64/N64.png");
-    insertEmulatorSystem(2,"MUPEN64 PLUS", "MUPEN.py")
-    insertEmulatorSystem(2,"Project64", "Project64.py")
-    insertGameRom("MarioKart.smc");
-    insertGameRom("Dropbox/OIT Shared Files/VaporArcade/Roms/Army Men - Air Combat.z64")
-    insertGameRom("Bonkers.smc")
+    insertEmulatorSystem(2,"MUPEN64 PLUS", "/Dropbox/OIT Shared Files/VaporArcade/Emulators/N64/MUPEN.py")
+    insertEmulatorSystem(2,"Project64", "/Dropbox/OIT Shared Files/VaporArcade/Emulators/N64/Project64.py")
+    insertGameRom("/Dropbox/OIT Shared Files/VaporArcade/Roms/MarioKart.smc");
+    insertGameRom("/Dropbox/OIT Shared Files/VaporArcade/Roms/Army Men - Air Combat.z64")
+    insertGameRom("/Dropbox/OIT Shared Files/VaporArcade/Roms/Bonkers.smc")
     insertRomRecord("Super Mario Brothers", "Mario is an italian plumber, created by japanese, speaks English, looks like a mexican, runs like a jamaican, jumps like he's black and snatches coins like a jew.",1,1);
     insertRomRecord("Army Men - Air Combat", "The Green and Tan armies are once again at war, this time by air. Players can select either the Huey, Chinook, Super Stallion or the Apache. In addition to the Tan Army are hordes of insects that players must also fight off. Players must protect tanks, trucks, other helicopters, a train, and a UFO.",2,2)
     insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
@@ -172,14 +172,7 @@ function testInserts()
     insertRomRecord("Super Mario Brothers", "Mario is an italian plumber, created by japanese, speaks English, looks like a mexican, runs like a jamaican, jumps like he's black and snatches coins like a jew.",1,1);
     insertRomRecord("Army Men - Air Combat", "The Green and Tan armies are once again at war, this time by air. Players can select either the Huey, Chinook, Super Stallion or the Apache. In addition to the Tan Army are hordes of insects that players must also fight off. Players must protect tanks, trucks, other helicopters, a train, and a UFO.",2,2)
     insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Bonners","That crazy game you have to be on acid to play.", 1,3);
+
     //
     insertRomMedia(1,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/Super-Mario-Bros.jpg");
     insertRomMedia(2,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/n64_armymenaircombat_front.jpg");

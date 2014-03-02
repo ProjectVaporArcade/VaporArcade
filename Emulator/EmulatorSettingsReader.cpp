@@ -8,6 +8,8 @@
 ******************************************************************************/
 #include "EmulatorSettingsReader.h"
 //Default constructor
+
+
 EmulatorSettingsReader::EmulatorSettingsReader(QObject *parent) :
     QObject(parent), mProcess(nullptr)
 {
@@ -19,38 +21,125 @@ EmulatorSettingsReader::~EmulatorSettingsReader()
     delete mProcess;
     mProcess = nullptr;
 }
-bool EmulatorSettingsReader::ReadSettings(const QString &systemDir, const QString &emuPyFile)
+
+void EmulatorSettingsReader::setPythonInterpreter(const QString& py)
 {
-    QString pythonPath("/"+systemDir + "/" + emuPyFile);
+    mPythonInterpreter=py;
+}
+void EmulatorSettingsReader::stop()
+{
+    if(mProcess != nullptr)
+    {
+        mProcess->close();
+        mProcess->waitForFinished(50);
+        delete mProcess;
+        mProcess= nullptr;
+    }
+}
+
+/******************************************************************************
+*	loadEmulator
+*** OVERVIEW **
+* 	Loads a specific emulator system python with a game.
+*** INPUT **
+*   Takes a string of the emulator system type, the emulator python file name,
+* and the path to the game to load after system information is gathered.
+*** OUTPUT **
+*   Returns a boolean value. If the emulator is python file was started with
+* python true is returned, however in the event that the python file could not
+* be started the return value is false.
+******************************************************************************/
+QString EmulatorSettingsReader::ReadEmuLaunchCommand( const QString& emuPyFile )
+{
+    QString build ="";
+    if(mProcess != nullptr)//Check for a running process
+    {
+        qDebug() << "already Running: " << mProcess->program();
+    }
+    else if((QFile(emuPyFile).exists()))//check if the python file exists
+    {
+        //check if the python interpreter is installed
+        qDebug () << mPythonInterpreter;
+        if((QFile::exists(mPythonInterpreter)))
+        {
+            mProcess = new QProcess;
+            mProcess->setProcessChannelMode(QProcess::MergedChannels);
+            qDebug() << "System Loading using "+ mPythonInterpreter +" \"" + emuPyFile + "\"";
+            mProcess->start(mPythonInterpreter+" \"" + emuPyFile + "\"");
+            if(mProcess->waitForStarted(500) && mProcess->waitForReadyRead(500))
+            {
+                QString str (mProcess->readAll());
+                qDebug() << str;
+                //check if the python file gave bad data
+                if(!str.startsWith("$%$"))
+                {
+                    stop();
+                    emit BadPyDataProcessed();
+                    qDebug() << "Python File is not in the correct format.";
+                }
+                else
+                {//format the data and propigate fields
+                    QStringList dataIn (str.split('\n'));
+                    if(dataIn.length() < 3)
+                    {
+                        qDebug() << "Error - Python file didn't contain enough data or in a bad format.";
+                        emit BadPyDataProcessed();
+                    }
+                    else
+                    {
+                        QString launcher = dataIn[1].split('=').last();
+                        qDebug() << launcher << " : " << QFile::exists(launcher);
+                        QStringList Arg(dataIn[2].split('=').last().split("\""));
+
+                        build = (launcher+ " " + (Arg.length() < 1?Arg[1] + " ":""));
+                        qDebug() << build;
+                    }
+                }
+                stop();
+
+            }else
+                qDebug() << "Python Core timed out.";
+            //emit EmulatorStarted(mLastPlayedSystem,mLastPlayedGame);
+        }else
+        {
+            qDebug() << "Unable to find python interpreter @ " + mPythonInterpreter;
+        }
+    }else
+    {
+        qDebug() << "Unable to Locate the python file @\"" + emuPyFile + "\"";
+    }
+    return build;//indicate if the launcher configuration is started
+}
+
+bool EmulatorSettingsReader::ReadSettings(const QString &emuPyFile)
+{
     bool ret(false);//Return value
     if(mProcess != nullptr)//Check for a running process
     {
         qDebug() << "already Running";
     }
-    else if((ret = QFile(pythonPath).exists()))//check if the python file exists
+    else if((ret = QFile(emuPyFile).exists()))//check if the python file exists
     {
         //check if the python interpreter is installed
-        QString pythonInterpreter("/python27/python.exe");
-
-        if((ret = QFile(pythonInterpreter).exists()))
+        if((ret = QFile(mPythonInterpreter).exists()))
         {
             try
             {
                 mProcess = new QProcess;
                 mProcess->setProcessChannelMode(QProcess::MergedChannels);
                 connect(mProcess,SIGNAL(readyRead()),this,SLOT(RxSettingsData()));
-                mProcess->start(pythonInterpreter+" \"" + pythonPath + "\" -t s");
+                mProcess->start(mPythonInterpreter+" \"" + emuPyFile + "\" -t s");
             }catch (const QException& etc)
             {
                 qDebug() << etc.what();
             }
         }else
         {
-            qDebug() << "Unable to find python interpreter @ " + pythonInterpreter;
+            qDebug() << "Unable to find python interpreter @ " + mPythonInterpreter;
         }
     }else
     {
-        qDebug() << "Unable to Locate the python file @\"" + pythonPath + "\"";
+        qDebug() << "Unable to Locate the python file @\"" + emuPyFile + "\"";
     }
     return ret;//indicate if the launcher configuration is started
 }

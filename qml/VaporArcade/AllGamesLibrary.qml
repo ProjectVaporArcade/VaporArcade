@@ -189,7 +189,7 @@ VaporRectangle {
                 emuComboBox.focus = true
             }else if(emuComboBox.focus)
             {
-              Emulators.start(gameLibrary.systemAbbrName, gameLibrary.emuList.get(emuComboBox.currentIndex).emuPath ,gameLibrary.gamePath);
+              Emulators.start(gameLibrary.emuList.get(emuComboBox.currentIndex).emuPath ,gameLibrary.gamePath);
             }
 
             //gameLibrary.currentItem
