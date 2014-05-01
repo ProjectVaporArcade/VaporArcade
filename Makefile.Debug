@@ -44,7 +44,7 @@ OBJECTS_DIR   = debug
 ####### Files
 
 SOURCES       = main.cpp \
-		applicationsettings.cpp \
+		AppSettings/applicationsettings.cpp \
 		qtquick2applicationviewer\qtquick2applicationviewer.cpp debug\moc_qtquick2applicationviewer.cpp \
 		debug\moc_applicationsettings.cpp
 OBJECTS       = debug/main.o \

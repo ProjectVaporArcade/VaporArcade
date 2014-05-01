@@ -8,11 +8,11 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    applicationsettings.cpp \
     Emulator/EmulatorSettingsReader.cpp \
     Emulator/EmulatorCore.cpp \
     Emulator/EmulatorServices.cpp \
-    filebrowser.cpp
+    filebrowser.cpp \
+    AppSettings/applicationsettings.cpp
 
 # Installation path
 # target.path =
@@ -21,13 +21,9 @@ SOURCES += main.cpp \
 include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
-OTHER_FILES += \
-    qml/VaporRevamp/VaporTheme.qml \
-    qml/VaporRevamp/GamesMenu.qml \
-    qml/VaporRevamp/GamesLibrary
 HEADERS += \
-    applicationsettings.h \
     Emulator/EmulatorSettingsReader.h \
     Emulator/EmulatorCore.h \
     Emulator/EmulatorServices.h \
-    filebrowser.h
+    filebrowser.h \
+    AppSettings/applicationsettings.h

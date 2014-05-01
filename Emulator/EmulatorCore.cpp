@@ -1,5 +1,7 @@
 #include "EmulatorCore.h"
 #include <QException>
+#include <stdlib.h>
+
 /******************************************************************************
 * Default Constructor
 ******************************************************************************/
@@ -21,15 +23,35 @@ EmulatorCore::~EmulatorCore()
 *** OUTPUT ***
 *   On completion of loading emulator launcher configuration
 ******************************************************************************/
-void EmulatorCore::start(const QString & emuPy, const QString & game)
+void EmulatorCore::start(const QString & emuexe, const QString & game)
 {
 
     if(mProcess == nullptr)
     {
         mProcess = new QProcess;
-        connect(mProcess,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(stop(int,QProcess::ExitStatus)) );
-        qDebug() << emuPy + game;
-        mProcess->start(emuPy + game);
+        //connect(mProcess,SIGNAL(stateChanged(QProcess::ProcessState,QPrivateSignal)),this,SLOT(emulatorStateChange(QProcess::ProcessState,QPrivateSignal)));
+        //connect(mProcess,SIGNAL(started(QPrivateSignal)),this,SLOT(emulatorStarted(QPrivateSignal)));
+        connect(mProcess,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(emuStopped(int,QProcess::ExitStatus)));
+        connect(mProcess,SIGNAL(error(QProcess::ProcessError)),this,SLOT(emuError(QProcess::ProcessError)));
+        qDebug() << emuexe + game;
+        QDir f (emuexe + game);
+        mProcess->startDetached(f.path());
+        mProcess->waitForStarted();
+        QProcess::ProcessState state = mProcess->state();
+        if(state == QProcess::Running || state == QProcess::Starting)
+        {
+            qDebug() << "Emulator Started Running";
+            emit EmulatorStarted(emuexe,game);
+        }else
+        {
+            emit Error("unable to start the emulator");
+            mProcess->disconnect(this);
+            mProcess->kill();
+            mProcess->waitForFinished();
+            delete mProcess;
+            mProcess = nullptr;
+            qDebug() << "unable to start process";
+        }
     }else
         qDebug() << mProcess->program();
 }
@@ -61,15 +83,17 @@ void EmulatorCore::setPythonInterpreter(const QString& py)
 }
 void EmulatorCore::emuStopped(int status, QProcess::ExitStatus etc)
 {
-    emit EmulatorStopped();
     qDebug() << "Emulator " + mLastPlayedSystem + " Stopped Playing " + mLastPlayedGame;
     stop(status, etc);
 }
 void EmulatorCore::emuError(QProcess::ProcessError status)
 {
     QString msg;
-    qDebug() << "ERROR STATUS: " << status;
-    emit Error(msg);
+    if(status == QProcess::FailedToStart)
+    {
+        msg = "Failed to start emulator";
+        emit Error(msg);
+    }
 }
 /******************************************************************************
 *	stop
@@ -85,6 +109,7 @@ int EmulatorCore::stop(int status, QProcess::ExitStatus etc)
         if(mProcess != nullptr)
         {
             mProcess->disconnect();
+            emit EmulatorStopped();
             mProcess->close();
             mProcess->waitForFinished(0);
             QProcess::ProcessState state = mProcess->state();
@@ -99,7 +124,6 @@ int EmulatorCore::stop(int status, QProcess::ExitStatus etc)
             }
             delete mProcess;
             mProcess = nullptr;
-
         }
     return status;
 }

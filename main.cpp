@@ -4,7 +4,7 @@
 #include <QQmlEngine>
 #include <QQmlComponent>
 #include "qtquick2applicationviewer.h"
-#include "applicationsettings.h"
+#include "AppSettings/applicationsettings.h"
 #include "Emulator/EmulatorServices.h"
 int main(int argc, char *argv[])
 {
@@ -13,11 +13,11 @@ int main(int argc, char *argv[])
     QtQuick2ApplicationViewer viewer;
     viewer.engine()->setOfflineStoragePath(QDir::homePath() + "/config/VaporArcade");
     ApplicationSettings settings;
-    EmulatorServices emulatorManager;
-    emulatorManager.setPythonInterpreter("/python27/python.exe");
+    //EmulatorServices emulatorManager;
+    settings.setPythonIntrpreter("/python27/python.exe");
     viewer.setScreen(screen);
     bool showExpanded(true);
-    showExpanded = false;//set to false for full screen
+    //showExpanded = false;//set to false for full screen
     int screen_width;
     int screen_height;
     if (!showExpanded)
@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("ScreenWidth", screen_width);
     viewer.rootContext()->setContextProperty("ScreenHeight", screen_height);
     viewer.rootContext()->setContextProperty("AppSettings", &settings);
-    viewer.rootContext()->setContextProperty("Emulators",&emulatorManager);
+    //viewer.rootContext()->setContextProperty("Emulators",&emulatorManager);
+    qmlRegisterType<EmulatorServices>("com.vapor.project", 1, 0, "EmulatorServices");
     viewer.setMainQmlFile(QStringLiteral("qml/VaporArcade/main.qml"));
 
     if (!showExpanded)

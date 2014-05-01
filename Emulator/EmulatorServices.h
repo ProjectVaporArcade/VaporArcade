@@ -33,11 +33,19 @@ public:
     Q_INVOKABLE void readSettings(QString emuPyFile){mSettingsReader.ReadSettings(emuPyFile);}
     Q_INVOKABLE void writeSettings(/*QString system, QString emuPyFile, SettingsHash settings*/){qDebug() << "FooBar";}
 signals:
+    void emulatorStopped();
+    void emulatorError(QString errorMsg);
+    //void emulatorFailedToStart(QString executable, QString game);
+    void emulatorStart(QString executablePath, QString romPath);
     void MultipleEmulatorsFound(QStringList emuList);
     void NoEmulatorsFound(QString directory);
-    void BadPyDataProcessed(QString ErrMsg);
     void SettingsLoaded(SettingsHash hash);
     void SettingsSaved();
+public slots:
+    //void emulatorFailedToStartSlot(const QString executable, const QString game);
+    void emulatorStartedSlot(QString exe, QString game);
+    void emulatorErrorSlot(QString errorMsg);
+    void emulatorStoppedSlot();
 private:
     void startGame(const QString & emuPy, const QString & game);
     QStringList getSysEmus();

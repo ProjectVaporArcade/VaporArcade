@@ -1,9 +1,9 @@
 import "vapordb.js" as VaporStorage
 //Qt.include("vapordb.js");
 import QtQuick 2.0
-Rectangle {
+Item {
     id:vaporDatabase
-    //color:Qt.transparent
+    //color:"transparent"
     property GridView libraryView:gameLibrary
     property ListModel gameList:gameListModel
     property ListModel emuNameList:emuNameListModel

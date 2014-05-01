@@ -66,7 +66,7 @@ QString EmulatorSettingsReader::ReadEmuLaunchCommand( const QString& emuPyFile )
             mProcess->setProcessChannelMode(QProcess::MergedChannels);
             qDebug() << "System Loading using "+ mPythonInterpreter +" \"" + emuPyFile + "\"";
             mProcess->start(mPythonInterpreter+" \"" + emuPyFile + "\"");
-            if(mProcess->waitForStarted(500) && mProcess->waitForReadyRead(500))
+            if(mProcess->waitForStarted() && mProcess->waitForReadyRead())
             {
                 QString str (mProcess->readAll());
                 qDebug() << str;
@@ -91,7 +91,7 @@ QString EmulatorSettingsReader::ReadEmuLaunchCommand( const QString& emuPyFile )
                         qDebug() << launcher << " : " << QFile::exists(launcher);
                         QStringList Arg(dataIn[2].split('=').last().split("\""));
 
-                        build = (launcher+ " " + (Arg.length() < 1?Arg[1] + " ":""));
+                        build = (launcher + (Arg.length() < 1? " " + Arg[1] + " ":""));
                         qDebug() << build;
                     }
                 }

@@ -10,7 +10,6 @@ VaporRectangle
 	zScalable: false
 	focusable: false
 	color: vaporTheme.shadow
-
 	Image
 	{
 		id: background
@@ -48,7 +47,6 @@ VaporRectangle
 		id: vaporSettings
 		visible: false
 	}
-
 	GamesMenu
 	{
 		id: gamesMenu
@@ -95,10 +93,7 @@ VaporRectangle
 			source: "./vaporGamesLogo.png"
 			anchors.centerIn: parent
 		}
-        Component.onCompleted:
-        {
-            Emulators.setEmulatorSystemDir(AppSettings.getEmulatorDirectory())
-        }
+
 	}
 
 	VaporRectangle
@@ -161,7 +156,7 @@ VaporRectangle
 		Keys.onReturnPressed:
 		{
 			vaporSettings.visible = true;
-			vaporSettings.setDefaultFocus("app");
+            vaporSettings.setDefaultFocus();
 			event.accepted = true;
 		}
 
@@ -202,7 +197,7 @@ VaporRectangle
 		{
 			if (event.key == Qt.Key_Return)
 			{
-				Qt.quit();
+                parent.exit()
 			}
 		}
 
@@ -213,6 +208,10 @@ VaporRectangle
 	{
 		gameEntry.focus = true;
 	}
+    function exit()
+    {
+        Qt.quit();
+    }
 
 	//this function does work after
 	//all elements have been generated

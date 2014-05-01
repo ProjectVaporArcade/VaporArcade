@@ -10,12 +10,33 @@ QStringList EmulatorServices::getSysEmus()
     }
     return emuSystems;
 }
+
 void EmulatorServices::startGame(const QString & exeCmd, const QString & game)
 {
     QString tmp = mSettingsReader.ReadEmuLaunchCommand(exeCmd);
     qDebug() << tmp + game;
-    if(exeCmd != "" && QFile::exists(game))
+    if(exeCmd != "" && QFile::exists(exeCmd))
     {
-        mEmulatorCore.start(mSettingsReader.ReadEmuLaunchCommand(exeCmd), "\"" + game + "\"");
-    }
+        //connect the process start, stop and error signals
+        connect(&mEmulatorCore,SIGNAL(Error(QString)),this,SLOT(emulatorErrorSlot(QString)));
+        connect(&mEmulatorCore,SIGNAL(EmulatorStopped()),this,SLOT(emulatorStoppedSlot()));
+        connect(&mEmulatorCore,SIGNAL(EmulatorStarted(QString,QString)),this,SLOT(emulatorStartedSlot(QString,QString)));
+        mEmulatorCore.start(mSettingsReader.ReadEmuLaunchCommand(exeCmd), (game.length() == 0)? "":" \"" + game + "\"");
+    }else
+        emit emulatorError("The executable supplied by the core python file does not exist.");
+
+}
+void EmulatorServices::emulatorErrorSlot(QString errorMsg)
+{
+    emit emulatorError(errorMsg);
+}
+
+void EmulatorServices::emulatorStartedSlot(QString exe,QString game)
+{
+    emit emulatorStart(exe, game);
+}
+
+void EmulatorServices::emulatorStoppedSlot()
+{
+    emit emulatorStopped();
 }

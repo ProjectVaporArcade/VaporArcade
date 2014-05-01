@@ -9,6 +9,7 @@ class ApplicationSettings : public QObject
 public:
     explicit ApplicationSettings(QObject *parent = 0);
     Q_INVOKABLE QString getUserName(){return mUserName;}
+    Q_INVOKABLE QString getPythonInterpreter(){return mPythonInterpreter;}
     Q_INVOKABLE QString getEmulatorDirectory(){return mEmulatorDirectory;}
     Q_INVOKABLE QString getRomDirectory(){return mRomDirectory;}
     Q_INVOKABLE QString getCoverDirectory(){return mCoverDirectory;}
@@ -23,7 +24,7 @@ public slots:
     void setPosterDirectory(QString poster_dir){mPosterDirectory = poster_dir;}
     void setVideoDirectory(QString video_dir){mVideoDirectory = video_dir;}
     void setUseNSD(bool use_nsd){mUseNetworkDiscovery = use_nsd;}
-
+    void setPythonIntrpreter(QString interpreter){mPythonInterpreter = interpreter;}
 private:
     QString mUserName;
     QString mEmulatorDirectory;
@@ -31,6 +32,7 @@ private:
     QString mCoverDirectory;
     QString mPosterDirectory;
     QString mVideoDirectory;
+    QString mPythonInterpreter;
     bool    mUseNetworkDiscovery;
     void writeSettingsFile(QDir &dir);
     void loadSettings(QDir &dir);

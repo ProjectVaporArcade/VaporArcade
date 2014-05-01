@@ -1,4 +1,5 @@
 .import QtQuick.LocalStorage 2.0 as Sql
+
 function getDatabase()
 {
      return Sql.LocalStorage.openDatabaseSync("VaporArcade.db", "1.0", "database for storing paths for rom library cover art.", 100000);
@@ -23,7 +24,9 @@ function initialize()
     db.transaction(
         function(tx)
         {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS EmulatorSystem( EmulatorID INTEGER PRIMARY KEY NOT NULL, SystemID INTEGER, EmulatorName VARCHAR(32), EmulatorPath VARCHAR(256), FOREIGN KEY(SystemID) REFERENCES GameSystem(SystemID));'); });
+            tx.executeSql('CREATE TABLE IF NOT EXISTS EmulatorSystem( EmulatorID INTEGER PRIMARY KEY NOT NULL, SystemID INTEGER, EmulatorName VARCHAR(32), EmulatorPath VARCHAR(256), FOREIGN KEY(SystemID) REFERENCES GameSystem(SystemID));');
+        }
+    );
     db.transaction(
         function(tx)
         {
@@ -150,37 +153,24 @@ function testInserts()
     insertMediaType("SPINE");
     insertGameSystem("Super Nintendo Entertainment System", "SNES","/Dropbox/My Qt/JP Stuff/JP Stuff For Eli And Aaron/VaporRevamp/VaporRevamp/Emulator/SNES/SNES.png");
     insertGameSystem("Nintendo 64", "N64","/Dropbox/My Qt/JP Stuff/JP Stuff For Eli And Aaron/VaporRevamp/VaporRevamp/Emulator/N64/N64.png");
+    insertGameSystem("Calculator", "CALC", "");
+    insertGameSystem("DummyEmulator", "STUB", "");
     insertEmulatorSystem(2,"MUPEN64 PLUS", "/Dropbox/OIT Shared Files/VaporArcade/Emulators/N64/MUPEN.py")
     insertEmulatorSystem(2,"Project64", "/Dropbox/OIT Shared Files/VaporArcade/Emulators/N64/Project64.py")
+    insertEmulatorSystem(3,"Calculator","/Users/Aaron Lindberg/Documents/GitHub/VaporArcade/Emulator/CALC/CALC.py")
+    insertEmulatorSystem(4,"DummyEmulator","/Users/Aaron Lindberg/Documents/GitHub/VaporArcade/Emulator/STUB/STUB.py")
+
     insertGameRom("/Dropbox/OIT Shared Files/VaporArcade/Roms/MarioKart.smc");
     insertGameRom("/Dropbox/OIT Shared Files/VaporArcade/Roms/Army Men - Air Combat.z64")
     insertGameRom("/Dropbox/OIT Shared Files/VaporArcade/Roms/Bonkers.smc")
-    insertRomRecord("Super Mario Brothers", "Mario is an italian plumber, created by japanese, speaks English, looks like a mexican, runs like a jamaican, jumps like he's black and snatches coins like a jew.",1,1);
-    insertRomRecord("Army Men - Air Combat", "The Green and Tan armies are once again at war, this time by air. Players can select either the Huey, Chinook, Super Stallion or the Apache. In addition to the Tan Army are hordes of insects that players must also fight off. Players must protect tanks, trucks, other helicopters, a train, and a UFO.",2,2)
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
+    insertGameRom("");
+    insertGameRom("/this is/the path/to/game.rom");
 
-    //fill
     insertRomRecord("Super Mario Brothers", "Mario is an italian plumber, created by japanese, speaks English, looks like a mexican, runs like a jamaican, jumps like he's black and snatches coins like a jew.",1,1);
     insertRomRecord("Army Men - Air Combat", "The Green and Tan armies are once again at war, this time by air. Players can select either the Huey, Chinook, Super Stallion or the Apache. In addition to the Tan Army are hordes of insects that players must also fight off. Players must protect tanks, trucks, other helicopters, a train, and a UFO.",2,2)
     insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Super Mario Brothers", "Mario is an italian plumber, created by japanese, speaks English, looks like a mexican, runs like a jamaican, jumps like he's black and snatches coins like a jew.",1,1);
-    insertRomRecord("Army Men - Air Combat", "The Green and Tan armies are once again at war, this time by air. Players can select either the Huey, Chinook, Super Stallion or the Apache. In addition to the Tan Army are hordes of insects that players must also fight off. Players must protect tanks, trucks, other helicopters, a train, and a UFO.",2,2)
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Super Mario Brothers", "Mario is an italian plumber, created by japanese, speaks English, looks like a mexican, runs like a jamaican, jumps like he's black and snatches coins like a jew.",1,1);
-    insertRomRecord("Army Men - Air Combat", "The Green and Tan armies are once again at war, this time by air. Players can select either the Huey, Chinook, Super Stallion or the Apache. In addition to the Tan Army are hordes of insects that players must also fight off. Players must protect tanks, trucks, other helicopters, a train, and a UFO.",2,2)
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-    insertRomRecord("Super Mario Brothers", "Mario is an italian plumber, created by japanese, speaks English, looks like a mexican, runs like a jamaican, jumps like he's black and snatches coins like a jew.",1,1);
-    insertRomRecord("Army Men - Air Combat", "The Green and Tan armies are once again at war, this time by air. Players can select either the Huey, Chinook, Super Stallion or the Apache. In addition to the Tan Army are hordes of insects that players must also fight off. Players must protect tanks, trucks, other helicopters, a train, and a UFO.",2,2)
-    insertRomRecord("Bonkers","That crazy game you have to be on acid to play.", 1,3);
-
-    //
+    insertRomRecord("Calculator","this is my c# calculator for testing", 3,4)
+    insertRomRecord("Dummy Game","this is a test to establish if stuff works", 4,5)
     insertRomMedia(1,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/Super-Mario-Bros.jpg");
     insertRomMedia(2,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/n64_armymenaircombat_front.jpg");
-    //fill
-    insertRomMedia(4,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/Super-Mario-Bros.jpg");
-    insertRomMedia(5,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/n64_armymenaircombat_front.jpg");
-    insertRomMedia(7,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/Super-Mario-Bros.jpg");
-    insertRomMedia(8,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/n64_armymenaircombat_front.jpg");
-    insertRomMedia(10,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/Super-Mario-Bros.jpg");
-    insertRomMedia(11,1,"/Dropbox/OIT Shared Files/VaporArcade/Covers/n64_armymenaircombat_front.jpg");
 }

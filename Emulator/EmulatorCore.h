@@ -30,14 +30,15 @@ public:
     void setEmulatorSystemDir(const QString& EmuDir);
     void setPythonInterpreter(const QString& py);
 signals:
-    void Error(QString msg);
-    void EmulatorStarted(QString system, QString game);
+    void Error(QString errorMessage);
+    void EmulatorStarted(QString executable, QString game);
     void EmulatorStopped();
-    void MultipleEmulatorsFound(QStringList emuList);
-    void NoEmulatorsFound(QString directory);
     void BadPyDataProcessed();
+    void emuStart();
 public slots:
+
     void emuError(QProcess::ProcessError status);
+    //void emulatorStateChange(QProcess::ProcessState state);
     void emuStopped(int, QProcess::ExitStatus);
     int stop(int status = 0, QProcess::ExitStatus etc = QProcess::NormalExit);
 private:

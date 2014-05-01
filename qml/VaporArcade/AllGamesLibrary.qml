@@ -178,6 +178,13 @@ VaporRectangle {
         opacity: 0.1
         anchors.centerIn: parent
     }
+    PlayingGame
+    {
+        id: activeGame
+        visible: false
+        returnObj: allGamesLibrary
+    }
+
     Keys.onPressed:
     {
         if (event.key == Qt.Key_Return)
@@ -189,7 +196,8 @@ VaporRectangle {
                 emuComboBox.focus = true
             }else if(emuComboBox.focus)
             {
-              Emulators.start(gameLibrary.emuList.get(emuComboBox.currentIndex).emuPath ,gameLibrary.gamePath);
+                activeGame.startGame(gameLibrary.emuList.get(emuComboBox.currentIndex).emuPath ,gameLibrary.gamePath);
+                //activeGame.setDefaultFocus()
             }
 
             //gameLibrary.currentItem

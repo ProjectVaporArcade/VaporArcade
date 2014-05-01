@@ -3,7 +3,7 @@
 #include <QDebug>
 ApplicationSettings::ApplicationSettings(QObject *parent) :
     QObject(parent), mUserName(""), mEmulatorDirectory(""), mRomDirectory(""), mCoverDirectory(""), mPosterDirectory(""),
-    mVideoDirectory(""), mUseNetworkDiscovery(true)
+    mVideoDirectory(""), mUseNetworkDiscovery(true), mPythonInterpreter("")
 {
     //check if file exists
     QString app_data_path(QDir::homePath() + '/' + "config/VaporArcade");
