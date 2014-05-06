@@ -24,13 +24,13 @@ VaporRectangle
 
 	Keys.onPressed:
 	{
-		if (event.key == Qt.Key_Return)
+        if (event.key === Qt.Key_Return)
 		{
 			emuSettingsContainer.focus = false;
 			//settings category_x.focus = true;
 			event.accepted = true;
 		}
-		else if (event.key == Qt.Key_Backspace)
+        else if (event.key === Qt.Key_Backspace)
 		{
 			emuSettingsContainer.visible = false;
             settingsContainer.setDefaultFocus();

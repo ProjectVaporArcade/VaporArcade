@@ -13,6 +13,14 @@ Rectangle
 
 	//determines whether or not to display glow
 	focus: false
+    MouseArea
+    {
+        enabled: focusable
+        onClicked:
+        {
+            vaporRect.focus = true;
+        }
+    }
 
 	//interface aliases
 	property alias glowOpacity: vaporGlow.opacity

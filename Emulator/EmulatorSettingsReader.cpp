@@ -59,17 +59,17 @@ QString EmulatorSettingsReader::ReadEmuLaunchCommand( const QString& emuPyFile )
     else if((QFile(emuPyFile).exists()))//check if the python file exists
     {
         //check if the python interpreter is installed
-        qDebug () << mPythonInterpreter;
+        //qDebug () << mPythonInterpreter;
         if((QFile::exists(mPythonInterpreter)))
         {
             mProcess = new QProcess;
             mProcess->setProcessChannelMode(QProcess::MergedChannels);
-            qDebug() << "System Loading using "+ mPythonInterpreter +" \"" + emuPyFile + "\"";
+            //qDebug() << "System Loading using "+ mPythonInterpreter +" \"" + emuPyFile + "\"";
             mProcess->start(mPythonInterpreter+" \"" + emuPyFile + "\"");
             if(mProcess->waitForStarted() && mProcess->waitForReadyRead())
             {
                 QString str (mProcess->readAll());
-                qDebug() << str;
+                //qDebug() << str;
                 //check if the python file gave bad data
                 if(!str.startsWith("$%$"))
                 {
@@ -82,17 +82,17 @@ QString EmulatorSettingsReader::ReadEmuLaunchCommand( const QString& emuPyFile )
                     QStringList dataIn (str.split('\n'));
                     if(dataIn.length() < 3)
                     {
-                        qDebug() << "Error - Python file didn't contain enough data or in a bad format.";
+                        //qDebug() << "Error - Python file didn't contain enough data or in a bad format.";
                         emit BadPyDataProcessed();
                     }
                     else
                     {
                         QString launcher = dataIn[1].split('=').last();
-                        qDebug() << launcher << " : " << QFile::exists(launcher);
+                        //qDebug() << launcher << " : " << QFile::exists(launcher);
                         QStringList Arg(dataIn[2].split('=').last().split("\""));
 
                         build = (launcher + (Arg.length() < 1? " " + Arg[1] + " ":""));
-                        qDebug() << build;
+                        //qDebug() << build;
                     }
                 }
                 stop();

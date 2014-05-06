@@ -4,6 +4,7 @@ import com.vapor.project 1.0
 VaporRectangle {
     id: activeGameDialog
     property var error: false
+    property var started: false;
     property var returnObj: parent
     property string gamePlaying: ""
     visible: false
@@ -23,10 +24,13 @@ VaporRectangle {
     }
     function startGame(emuPy, game)
     {
-
-        error = false
-        gamePlaying = game
-        emulatorServices.start(emuPy, game)
+        if(!started)
+        {
+            started = true
+            error = false
+            emulatorServices.start(emuPy, game)
+            gamePlaying = game
+        }
     }
     function stopGame()
     {
@@ -55,7 +59,6 @@ VaporRectangle {
         {
             stopGame();
         }
-
     }
 
     Connections
@@ -64,21 +67,26 @@ VaporRectangle {
         target: emulatorServices
         onEmulatorStart:
         {
-            //event.accepted = true;
             message.text = "Emulator Started"
             activeGameDialog.setDefaultFocus()
+            started = false;
+            returnObj.resetStarted();
         }
         onEmulatorError:
         {
+            started = false;
             message.text = errorMsg
             activeGameDialog.setDefaultFocus()
             error = true;
+            returnObj.resetStarted();
         }
 
         onEmulatorStopped:
         {
+            started = false
             //event.accepted = true;
             activeGameDialog.leaveFocus();
+            returnObj.resetStarted();
         }
     }
 

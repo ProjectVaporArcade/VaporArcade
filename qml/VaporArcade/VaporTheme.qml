@@ -1,10 +1,12 @@
 import QtQuick 2.0
-
+import QtQuick.Controls 1.0
+import QtQuick.Controls.Styles 1.0
 Item
 {
 	id: vaporTheme
 
 	//team vapor color theme
+    property string error: "red"
 	property string alternateBase: "#3e519c"
 	property string base: "#26305c"
     property string light: "#b3ccee"

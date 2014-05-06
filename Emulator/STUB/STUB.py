@@ -2,9 +2,9 @@
 import argparse
 import os
 ## FILL IN EMULATOR PATH (Absolute)
-EmulatorPath = "/Users/Aaron Lindberg/Documents/GitHub/VaporArcade/Emulator/STUB/DummyEmulator.exe"
+EmulatorPath = "cmd.exe"
 ## FILL IN EMULATOR ARGUMENTS
-Arguments = "-fullscreen -rom"
+Arguments = "/C START"
 ## FILL IN EMULATOR SETTINGS FILE PATH (Absolute)
 SettingsFile = ""
  

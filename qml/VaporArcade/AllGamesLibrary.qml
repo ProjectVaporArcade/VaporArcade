@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
-import "vapordb.js" as VaporStorage
+//import "vapordb.js" as VaporStorage
 VaporRectangle {
     id: allGamesLibrary
     width: homescreen.width
@@ -11,6 +11,7 @@ VaporRectangle {
 
     function setDefaultFocus()
     {
+        vaporDbListModels.selectAllRomRecords();
         allGameLibrary.visible = true
         gameLibrary.focus = true;
 
@@ -24,7 +25,7 @@ VaporRectangle {
     GameLibrary
     {
         id:gameLibrary
-        property int systemID: 0
+        property var systemID: 0
         property string gameName: ""
         property string gamePath: ""
         property string systemAbbrName: ""
@@ -55,7 +56,7 @@ VaporRectangle {
             //systemRect
             gameDesc=tmp
             gameName=name
-            gamePath=game
+            gamePath=path
             systemAbbrName = sysAbbr
             gameCover = disp
             systemPic = sysPic
@@ -117,7 +118,7 @@ VaporRectangle {
         ComboBox
         {
             id:emuComboBox
-            model: gameLibrary.emuNameList
+            model: vaporDbListModels.emulatorNameList
             anchors.top: systemRectTxt.bottom
             anchors.horizontalCenter: systemRectTxt.horizontalCenter
             visible: false
@@ -182,26 +183,32 @@ VaporRectangle {
     {
         id: activeGame
         visible: false
+        property var startedRun: false
         returnObj: allGamesLibrary
     }
-
+    function resetStarted()
+    {
+        activeGame.startedRun = false;
+    }
     Keys.onPressed:
     {
-        if (event.key == Qt.Key_Return)
+
+        if (event.key == Qt.Key_Return && !activeGame.startedRun)
         {
+            activeGame.startedRun = true;
+            event.accepted = true;
             if(gameLibrary.focus)
             {
-                VaporStorage.refreshEmuList(gameLibrary.emuNameList,gameLibrary.emuList,gameLibrary.systemID)
+                vaporDbListModels.selectEmulatorsBySystem(gameLibrary.systemID)
                 emuComboBox.visible = true
                 emuComboBox.focus = true
+                activeGame.startedRun = false
             }else if(emuComboBox.focus)
             {
-                activeGame.startGame(gameLibrary.emuList.get(emuComboBox.currentIndex).emuPath ,gameLibrary.gamePath);
-                //activeGame.setDefaultFocus()
+                try{
+                    activeGame.startGame(vaporDbListModels.emulatorDataList.get(emuComboBox.currentIndex).emulatorPath ,gameLibrary.gamePath);
+                }catch(e){activeGame.startedRun = false;}
             }
-
-            //gameLibrary.currentItem
-            //)
         }else if (event.key == Qt.Key_Backspace)
         {
             event.accepted = true

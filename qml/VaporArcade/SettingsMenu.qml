@@ -33,6 +33,7 @@ VaporRectangle
 	}
     Keys.onPressed:
     {
+        event.accepted = true;
         if(event.key == Qt.Key_Down)
         {
             setTab(currentTab+1)
@@ -48,7 +49,6 @@ VaporRectangle
             resetTabSelection();
             settingsContainer.visible = false;
             homescreen.setDefaultFocus();
-            event.accepted = true;
         }
     }
 	Image
@@ -73,7 +73,6 @@ VaporRectangle
         color: "transparent"
 		focus: false
 		radius: 9
-
 		Column
 		{
 			id: navigationTabPositioner

@@ -28,14 +28,15 @@ void EmulatorCore::start(const QString & emuexe, const QString & game)
 
     if(mProcess == nullptr)
     {
-        mProcess = new QProcess;
+        mProcess = new QProcess(nullptr);
         //connect(mProcess,SIGNAL(stateChanged(QProcess::ProcessState,QPrivateSignal)),this,SLOT(emulatorStateChange(QProcess::ProcessState,QPrivateSignal)));
         //connect(mProcess,SIGNAL(started(QPrivateSignal)),this,SLOT(emulatorStarted(QPrivateSignal)));
         connect(mProcess,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(emuStopped(int,QProcess::ExitStatus)));
         connect(mProcess,SIGNAL(error(QProcess::ProcessError)),this,SLOT(emuError(QProcess::ProcessError)));
-        qDebug() << emuexe + game;
+
         QDir f (emuexe + game);
-        mProcess->startDetached(f.path());
+        qDebug() << f.path() ;//emuexe + game;
+        mProcess->start(f.path());
         mProcess->waitForStarted();
         QProcess::ProcessState state = mProcess->state();
         if(state == QProcess::Running || state == QProcess::Starting)

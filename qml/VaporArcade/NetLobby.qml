@@ -247,16 +247,6 @@ VaporRectangle
 				KeyNavigation.down: backButton
 				KeyNavigation.left: textEditor
 //				KeyNavigation.right: lobbyListContainer
-
-				onClicked:
-				{
-					navigationButtonContainer.backButtonPressed = false;
-					netLobby.visible = false;
-//                    vaporInputDialog.setDialogMessage("Please enter a lobby name.");
-//                    vaporInputDialog.show(monitor);
-//                    zoomsurface.zoomToItemCentered(vaporInputDialog);
-//                    vaporInputDialog.onAccepted.connect(startLobby);
-				}
 			}
 		}
 

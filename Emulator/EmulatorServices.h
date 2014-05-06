@@ -22,7 +22,7 @@ class EmulatorServices: public QObject
 {
     Q_OBJECT
 public:
-    EmulatorServices(QObject* parent = nullptr):QObject(parent){}
+    EmulatorServices(QObject* parent = nullptr):QObject(parent),tryStart(false){}
     ~EmulatorServices(){}
     Q_INVOKABLE void start(const QString & emuPy, const QString & game){startGame(emuPy, game);}
     Q_INVOKABLE void setRomsDir(const QString& RomsDir){ mRomsDir = RomsDir;}
@@ -48,6 +48,7 @@ public slots:
     void emulatorStoppedSlot();
 private:
     void startGame(const QString & emuPy, const QString & game);
+    bool tryStart;
     QStringList getSysEmus();
     QString mEmulatorDir;
     QString mRomsDir;

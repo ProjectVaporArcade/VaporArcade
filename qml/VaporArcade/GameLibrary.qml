@@ -1,21 +1,19 @@
 import QtQuick 2.0
+import "Database"
 GridView {
     id:gameLibrary
-    property VaporDB vaporDB:vaporDbGameList
-    property ListModel emuList:vaporDbGameList.emuList
-    property ListModel emuNameList:vaporDbGameList.emuNameList
-    property ListModel gameList:vaporDbGameList.gameList
-    property GridView libraryView:vaporDbGameList.libraryView
+    //property ListModel emuList:vaporDbGameList.emuList
+    //property ListModel emuNameList:vaporDbGameList.emuNameList
+    //property ListModel gameList:vaporDbGameList.gameList
+    //property GridView libraryView:vaporDbGameList.libraryView
     cellHeight : ScreenHeight*1/4
     cellWidth : ScreenWidth/8
     highlightRangeMode:GridView.ApplyRange
     width: parent.width
     height: ScreenHeight/3
-    signal selectedChanged(string name, string game, string desc, string disp, string sysFull, string sysAbbr, string sysPic, var sysID)
+    signal selectedChanged(string name, string path, string desc, string disp, string sysFull, string sysAbbr, string sysPic, var sysID)
     //interactive: false
-    VaporDB{
-        id:vaporDbGameList
-    }
+
     Component {
         id: gameDelegate
         VaporRectangle {
@@ -23,7 +21,7 @@ GridView {
             onActiveFocusChanged: {
                 if(focus == true)
                 {
-                    gameLibrary.selectedChanged(name,game,desc,display,sysFull,sysAbbr,sysPic,sysID);
+                    gameLibrary.selectedChanged(name,path,desc,display,sysFull,sysAbbr,sysPic,sysID);
                 }
             }
 
@@ -54,7 +52,7 @@ GridView {
 
         }
     }
-    model: vaporDbGameList.gameList
+    model: vaporDbListModels.gameRomList
     delegate: gameDelegate
     focus: true
 }

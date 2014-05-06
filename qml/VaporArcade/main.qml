@@ -1,5 +1,5 @@
 import QtQuick 2.0
-
+import "Database"
 VaporRectangle
 {
 	id: homescreen
@@ -10,6 +10,10 @@ VaporRectangle
 	zScalable: false
 	focusable: false
 	color: vaporTheme.shadow
+    VaporDatabaseListModels
+    {
+        id:vaporDbListModels
+    }
 	Image
 	{
 		id: background
@@ -112,16 +116,18 @@ VaporRectangle
 		anchors.leftMargin: 30
 		radius: 9
 		opacity: 0.9
-
 		KeyNavigation.up: powerButton
 		KeyNavigation.left: gameEntry
 		KeyNavigation.right: settingsEntry
-
+        function enter()
+        {
+            vaporChat.visible = true;
+            vaporChat.setDefaultFocus();
+        }
 		Keys.onReturnPressed:
-		{
-			vaporChat.visible = true;
-			event.accepted = true;
-			vaporChat.setDefaultFocus();
+        {
+            event.accepted = true;
+            enter()
 		}
 
 		Image

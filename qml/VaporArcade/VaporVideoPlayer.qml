@@ -9,7 +9,7 @@ VaporRectangle
 
 	function play()
 	{
-		player.play();
+        //player.play();//needs to be destroyed on closing?
 		console.log(AppSettings.getVideoDirectory());
 		console.log(player.source);
 	}

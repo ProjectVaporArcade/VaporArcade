@@ -4,8 +4,9 @@ folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
 # Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH = Database
 
+CONFIG += C++11
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     Emulator/EmulatorSettingsReader.cpp \
@@ -27,3 +28,5 @@ HEADERS += \
     Emulator/EmulatorServices.h \
     filebrowser.h \
     AppSettings/applicationsettings.h
+
+OTHER_FILES +=
