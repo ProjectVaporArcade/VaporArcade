@@ -34,9 +34,9 @@ void EmulatorCore::start(const QString & emuexe, const QString & game)
         connect(mProcess,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(emuStopped(int,QProcess::ExitStatus)));
         connect(mProcess,SIGNAL(error(QProcess::ProcessError)),this,SLOT(emuError(QProcess::ProcessError)));
 
-        QDir f (emuexe + game);
-        qDebug() << f.path() ;//emuexe + game;
-        mProcess->start(f.path());
+        QString builtCmd = emuexe + ((game.length() > 0)?" \""+game+"\"":"");
+        qDebug() <<  builtCmd;//emuexe + game;
+        mProcess->start(builtCmd);
         mProcess->waitForStarted();
         QProcess::ProcessState state = mProcess->state();
         if(state == QProcess::Running || state == QProcess::Starting)

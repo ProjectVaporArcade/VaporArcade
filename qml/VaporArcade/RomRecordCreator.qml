@@ -50,8 +50,8 @@ VaporRectangle
                 title: "Please choose a ROM"
                 onAccepted:
                 {
-                    console.debug(fileDialog.fileUrl.toString().substring(10))
-                    filePath.text = fileDialog.fileUrl.toString().substring(10)//.toLocalFile()
+                    console.debug(fileDialog.fileUrl.toString().substring(8))
+                    filePath.text = fileDialog.fileUrl.toString().substring(8)//.toLocalFile()
                 }
                 onRejected:
                 {
@@ -98,7 +98,7 @@ VaporRectangle
                 {
                     id: filePath
                     enabled: false
-                textColor: "black"
+                    textColor: "black"
                     style:TextFieldStyle
                     {
                         background: Rectangle {
@@ -177,7 +177,13 @@ VaporRectangle
                         width:parent.width-gameTitleLabel.width
                         z:1000
                         dropDownModel:vaporDbListModels.gameTitleNameList
-
+                        onFocusChanged:
+                        {
+                            if(focus == true)
+                            {
+                                vaporDbListModels.selectAllGameTitles()
+                            }
+                        }
                         onAccept:
                         {
                             getInsertGameTitle.focus = true

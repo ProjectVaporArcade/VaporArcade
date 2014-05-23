@@ -19,28 +19,32 @@ Item
     Component.onCompleted:
     {
         VaporDB.initialize();
-        //testInserts();
+        testInserts();
         selectAllGameTitles()
         selectAllGameSystems()
         //
     }
     function testInserts()
     {
-        insertGameTitle("Test Title")
-        insertGameTitle("N/A")
-        insertGameTitle("Title 1")
-        insertGameTitle("Title 2")
-        insertGameTitle("Title 3")
-        insertGameTitle("Title 4")
+        try{
         insertGameTitle("Mario")
-        insertGameSystem("Calculator","Calc","")
-        insertGameSystem("Nintendo 64","N64","")
-        insertGameSystem("Super Nintendo Entertainment System","SNES","")
-        insertGameSystem("Nintendo Entertainment System","NES","")
-        insertEmulator(1,"C# Calculator","/Users/Aaron Lindberg/Documents/GitHub/VaporArcade/Emulator/CALC/CALC.py")
-        insertMediaType("COVER");
-        insertRomRecord("","calc", "desc",1,"")
+
+        insertGameSystem("Calculator","Calc","")//1
+        insertGameSystem("Nintendo 64","N64","")//2
+        insertGameSystem("Super Nintendo Entertainment System","SNES","/Dropbox/OIT Shared Files/VaporArcade/Emulators/SNES/SNES.png")//3
+        insertGameSystem("Nintendo Entertainment System","NES","")//4
+
+        insertEmulator(3,"ZSNES","/Users/Aaron Lindberg/config/VaporArcade/Emulators/SNES/zsnes.py")//1
+        insertEmulator(4,"JNES","/Users/Aaron Lindberg/config/VaporArcade/Emulators/NES/jnes.py")//2
+        insertEmulator(1,"CALC","/Users/Aaron Lindberg/config/VaporArcade/Emulators/CALC/CALC.py")//3
+
+        insertMediaType("COVER");//1
+
+        insertRomRecord(1,"Super Mario Bros. 3", "nes Mario Game... Play me Meow.",4,"C:\\Dropbox\\OIT Shared Files\\VaporArcade\\Roms\\Super Mario Bros 3.zip")//1
+        insertRomRecord(1,"Super Mario World", "sNes Mario Game... Play me Meow.",3,"C:\\Dropbox\\OIT Shared Files\\VaporArcade\\Roms\\Super Mario World.smc")//2
+        insertRomRecord(1,"Romancing Saga 3","Romancing Saga 3",3,'C:\\Users\\Aaron Lindberg\\Downloads\\Romancing Saga 3.smc')
         insertMedia(1,1,"")
+        }catch(e){}
     }
 
     id: vaporDatabaseListModels

@@ -52,6 +52,7 @@ void EmulatorSettingsReader::stop()
 QString EmulatorSettingsReader::ReadEmuLaunchCommand( const QString& emuPyFile )
 {
     QString build ="";
+
     if(mProcess != nullptr)//Check for a running process
     {
         qDebug() << "already Running: " << mProcess->program();
@@ -91,8 +92,9 @@ QString EmulatorSettingsReader::ReadEmuLaunchCommand( const QString& emuPyFile )
                         //qDebug() << launcher << " : " << QFile::exists(launcher);
                         QStringList Arg(dataIn[2].split('=').last().split("\""));
 
-                        build = (launcher + (Arg.length() < 1? " " + Arg[1] + " ":""));
-                        //qDebug() << build;
+                        build = (launcher + ((Arg.length() < 2)?"": " " + Arg[1]));
+                        qDebug() << build;
+                        qDebug() << Arg;
                     }
                 }
                 stop();
