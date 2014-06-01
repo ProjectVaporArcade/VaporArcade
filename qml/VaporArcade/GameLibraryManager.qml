@@ -1,5 +1,6 @@
 import QtQuick 2.0
-
+//Author Aaron Lindberg
+//allows for the database to be manipulated
 VaporRectangle {
     id: gameLigraryManager
     color:"transparent"

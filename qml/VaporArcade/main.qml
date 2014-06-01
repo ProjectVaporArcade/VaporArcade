@@ -1,5 +1,9 @@
 import QtQuick 2.0
 import "Database"
+/******************************************************************************
+*Author Jack Sanchez
+*Contributers Jack Sanchez, Eli Kloft, & Aaron Lindberg
+******************************************************************************/
 VaporRectangle
 {
 	id: homescreen

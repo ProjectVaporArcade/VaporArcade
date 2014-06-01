@@ -1,4 +1,9 @@
 #include "EmulatorServices.h"
+/******************************************************************************
+ *Author Aaron Lindberg
+ *Contributers Aaron Lindberg
+ *****************************************************************************/
+
 QStringList EmulatorServices::getSysEmus()
 {
     QDirIterator iter (mEmulatorDir);
@@ -10,7 +15,14 @@ QStringList EmulatorServices::getSysEmus()
     }
     return emuSystems;
 }
-
+/******************************************************************************
+*   startGame
+*** Input ***
+*   Tale a string of the executavle to run with arguments, followed by the game
+* ROM path
+*** Overview ***
+*   Starts child process by appending the game to the execute commad.
+******************************************************************************/
 void EmulatorServices::startGame(const QString & exeCmd, const QString & game)
 {
     if(!tryStart)
@@ -30,6 +42,7 @@ void EmulatorServices::startGame(const QString & exeCmd, const QString & game)
     }
 
 }
+
 void EmulatorServices::emulatorErrorSlot(QString errorMsg)
 {
     emit emulatorError(errorMsg);

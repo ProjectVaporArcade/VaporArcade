@@ -2,6 +2,11 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Dialogs 1.0
 import QtQuick.Controls.Styles 1.0
+/******************************************************************************
+*Author Aaron Lindberg
+*Contributers Eli Kloft & Aaron Lindberg
+* Allows for a Rom Record to be added to the database
+******************************************************************************/
 VaporRectangle
 {
     property var selectedContainer: romPathContainer

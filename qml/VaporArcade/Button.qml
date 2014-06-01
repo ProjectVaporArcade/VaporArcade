@@ -1,5 +1,5 @@
 import QtQuick 2.0
-
+// jack sanchez - Recreating the wheel he never uses.
 VaporRectangle
 {
 	id: button

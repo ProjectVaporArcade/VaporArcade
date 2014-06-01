@@ -1,5 +1,8 @@
 import QtQuick 2.0
-
+/******************************************************************************
+*Author Jack sanchez
+*Contributers Eli Kloft & Aaron Lindberg
+******************************************************************************/
 VaporRectangle
 {
 	id: settingsContainer

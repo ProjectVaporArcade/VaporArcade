@@ -2,16 +2,25 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Dialogs 1.0
 import QtQuick.Controls.Styles 1.0
-
+/******************************************************************************
+* Author: Aaron Lindberg
+**** Overview ***
+* this compnent is a drop down comboBox That allows for text to be
+* entered or selected from the drop down.
+******************************************************************************/
 VaporRectangle
 {
+//signal emitted when the editable combobox choice has been entered or selected
     signal accept ()
+    //number of items to show in the dropdown
     property int previewCount: 5
+    //current text in the editable field
     property string currentText:editField.text
+    //the list model to display the drop down choices
     property ListModel dropDownModel:defaultModel
     ListModel
-    {
-        id:defaultMode;
+    {//default list model data
+        id:defaultModel
         ListElement
         {
             title:"comboBoxItem title"
@@ -30,12 +39,10 @@ VaporRectangle
             editField.focus = focus
             focus = false
         }
-
     }
     TextField
     {
         anchors.margins: editableComboBox.height/5
-        //anchors.verticalCenter: editableComboBox.verticalCenter
         id:editField
         height: editableComboBox.height
         width: editableComboBox.width

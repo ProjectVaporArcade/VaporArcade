@@ -1,5 +1,8 @@
 import QtQuick 2.0
-
+/******************************************************************************
+*Author Jack Sanchez
+*Contributers Jack Sanchez
+******************************************************************************/
 VaporRectangle
 {
 	id: tabContainer

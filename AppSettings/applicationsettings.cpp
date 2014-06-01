@@ -1,6 +1,12 @@
 #include "applicationsettings.h"
 #include <QDir>
 #include <QDebug>
+/******************************************************************************
+ *Author christopher Dean
+ *Contributers Christopher Dean & Aaron Lindberg
+ *** Overview ***
+ * allows for settings to be loaded, modified and saved.
+ *****************************************************************************/
 ApplicationSettings::ApplicationSettings(QObject *parent) :
     QObject(parent), mUserName(""), mEmulatorDirectory(""), mRomDirectory(""), mCoverDirectory(""), mPosterDirectory(""),
     mVideoDirectory(""), mUseNetworkDiscovery(true), mPythonInterpreter("")
@@ -35,7 +41,8 @@ void ApplicationSettings::writeSettingsFile(QDir&  dir)
                    "\"\nRomDir=\"" + mRomDirectory +
                    "\"\nCoverDir=\"" + mCoverDirectory +
                    "\"\nPosterDir=\"" + mPosterDirectory +
-                   "\"\nVideoDir=\"" + mVideoDirectory + "\"").toLocal8Bit() +
+                   "\"\nVideoDir=\"" + mVideoDirectory +
+                   "\"\nInterpreterPath=\"" + mPythonInterpreter + "\"").toLocal8Bit() +
                    "\nUseNetworkDiscovery=\""+ bool_out.toLocal8Bit() + "\"");
     settings.close();
 }
@@ -45,12 +52,11 @@ void ApplicationSettings::loadSettings(QDir& dir)
     QFile settings(dir.absolutePath() + "/user.ini",this);
     settings.open(QIODevice::ReadOnly); // open and read in data
     QStringList strlst(QString(settings.readAll()).split("\n"));
-    qDebug() << strlst;
     settings.close();
     // for each setting value
     // get the whole line, split it on the '=',
     // grab the second half of the string, removing the  ""s
-    if(strlst.length() >= 7)
+    if(strlst.length() >= 8)
     {
         mUserName = strlst.at(0);
         mUserName = mUserName.split('=')[1].replace("\"","");
@@ -64,7 +70,9 @@ void ApplicationSettings::loadSettings(QDir& dir)
         mPosterDirectory = mPosterDirectory.split('=')[1].replace("\"","");
         mVideoDirectory = strlst.at(5);
         mVideoDirectory = mVideoDirectory.split('=')[1].replace("\"","");
-        mUseNetworkDiscovery = !(strlst.at(6).split('=')[1].replace("\"","") == "false");
+        mPythonInterpreter = strlst.at(6);
+        mPythonInterpreter = mPythonInterpreter.split('=')[1].replace("\"","");
+        mUseNetworkDiscovery = !(strlst.at(7).split('=')[1].replace("\"","") == "false");
     }
     else
         qDebug() << "Error The settings file was never a thing.\nCheck ApplicationSettings";

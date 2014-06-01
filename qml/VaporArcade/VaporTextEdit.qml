@@ -1,7 +1,8 @@
 import QtQuick 2.0
-//import './ChatHandler.js' as Handler
-
-
+/******************************************************************************
+*Author Jack Sanchez
+*Contributers Jack Sanchez
+******************************************************************************/
 VaporRectangle
 {
 	id: textInputContainer

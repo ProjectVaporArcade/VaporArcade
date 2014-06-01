@@ -1,6 +1,11 @@
 #ifndef APPLICATIONSETTINGS_H
 #define APPLICATIONSETTINGS_H
-
+/******************************************************************************
+ *Author christopher Dean
+ *Contributers Christopher Dean & Aaron Lindberg
+ *** Overview ***
+ * allows for settings to be loaded, modified and saved.
+ *****************************************************************************/
 #include <QObject>
 class QDir;
 class ApplicationSettings : public QObject

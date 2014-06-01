@@ -1,5 +1,5 @@
 import QtQuick 2.0
-
+//Jack Sanchez
 //must set size from parent object
 VaporRectangle
 {

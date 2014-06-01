@@ -1,6 +1,10 @@
 import QtQuick 2.0
-//import './ChatHandler.js' as Handler
-
+/******************************************************************************
+*Author Jack Sanchez
+*Contributers Jack Sanchez
+*** Overview ***
+* The UI Rat trap network lobby
+******************************************************************************/
 VaporRectangle
 {
 	id: netLobbyContainer

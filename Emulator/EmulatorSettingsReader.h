@@ -1,6 +1,9 @@
 #ifndef EMULATORSETTINGSREADER_H
 #define EMULATORSETTINGSREADER_H
-
+/******************************************************************************
+ *Author Aaron Lindberg
+ *Contributers Aaron Lindberg
+ *****************************************************************************/
 #include <QObject>
 #include <QDebug>
 #include <QProcess>

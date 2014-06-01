@@ -2,7 +2,11 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Dialogs 1.0
 import QtQuick.Controls.Styles 1.0
-
+/******************************************************************************
+*Author Aaron Lindberg
+*Contributers Eli Kloft & Aaron Lindberg
+* Vapor Style Combobox
+******************************************************************************/
 VaporRectangle
 {
     signal accept (string system)
@@ -71,7 +75,7 @@ VaporRectangle
         delegate: TextField
         {
             property bool itemSelected: vaporComboBox.focus && options.currentItem == dele
-            property var sqlRowID:sqlID
+            //property var sqlRowID:sqlID
             text:title
             width:vaporComboBox.width
             height: vaporComboBox.height

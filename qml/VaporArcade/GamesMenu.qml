@@ -1,5 +1,6 @@
 import QtQuick 2.0
-
+//Author Jack Sanchez
+//contributers Eli Kloft, Aaron Lindberg & Jack Sanchez
 VaporRectangle
 {
     id: gamesContainer

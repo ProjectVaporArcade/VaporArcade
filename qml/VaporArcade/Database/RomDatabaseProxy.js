@@ -1,6 +1,19 @@
 .import QtQuick.LocalStorage 2.0 as Sql
 .import "VaporDatabase.js" as VaporDB
+/******************************************************************************
+*Author Aaron Lindberg
+*Contributers Eli Kloft & Aaron Lindberg
+*** Overview ***
+* Manages the ROM related database transactions.
+******************************************************************************/
 
+/******************************************************************************
+*   insertGameTitle
+*** Input ***
+*   Take a String of the game title to insert into the database.
+*** Overview ***
+*   Inserts a string game title into the game title table
+******************************************************************************/
 function insertGameTitle( gameTitle )
 {
     VaporDB.getDatabase().transaction(
@@ -9,6 +22,14 @@ function insertGameTitle( gameTitle )
         tx.executeSql('INSERT INTO GameTitle(Title)VALUES (?);',[gameTitle]);
     });
 }
+/******************************************************************************
+*   getInsertGameTitleID
+*** Input ***
+*   Take a String of the game title to insert or get the id into the database.
+*** Overview ***
+*   If the game title doesn't already exist in the database, create it and
+* return the Id for the game title
+******************************************************************************/
 function getInsertGameTitleID( gameTitle )
 {
     var gameTitleID = gameTitleExists(gameTitle)
@@ -19,7 +40,16 @@ function getInsertGameTitleID( gameTitle )
     }
     return gameTitleID
 }
-
+/******************************************************************************
+*   gameTitleExists
+*** Input ***
+*   Take a String of the game title to check if it exists.
+*** Overview ***
+*   Checks if the game title already exist in the database, if the title exists
+* return the title ID
+** Output ***
+* Returns the game title id
+******************************************************************************/
 function gameTitleExists( gameTitle )
 {
     var res;
@@ -35,6 +65,14 @@ function gameTitleExists( gameTitle )
     });
     return result
 }
+/******************************************************************************
+*   selectAllGameTitles
+*** Input ***
+*   Take two listModels one for the game Title Name, the other for game title
+* Data
+*** Overview ***
+*   Fills the Name and Data lists with game Title records.
+******************************************************************************/
 function selectAllGameTitles(gameTitleName, gameTitleData)
 {
     var res;
@@ -56,7 +94,14 @@ function selectAllGameTitles(gameTitleName, gameTitleData)
     });
     return res;
 }
-
+/******************************************************************************
+*   insertRomRecord
+*** Input ***
+*   Take string rom name, integer game Title ID, string description, integer
+* system ID, and string of the rom path.
+*** Overview ***
+*   Inserts a Rom Record into the database.
+******************************************************************************/
 function insertRomRecord( romName, gameTitleID, description, systemID, romPath )
 {
     VaporDB.getDatabase().transaction(
@@ -65,6 +110,13 @@ function insertRomRecord( romName, gameTitleID, description, systemID, romPath )
         tx.executeSql('INSERT INTO ROM_Records(ROM_Name, GameTitleID, Description, PlayCount, HoursPlayed, SystemID, RomPath)VALUES (?, ?, ?, 0, 0, ?, ?);',[romName,gameTitleID, description, systemID, romPath]);
     });
 }
+/******************************************************************************
+*   refreshAllGames
+*** Input ***
+*   Takes a game List model to fill with rom games from the database.
+*** Overview ***
+*   Fills the Game List Model with ROMs from the database.
+******************************************************************************/
 function refreshAllGames(gameList)
 {
     var res;

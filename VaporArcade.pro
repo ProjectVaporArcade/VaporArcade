@@ -14,7 +14,6 @@ SOURCES += main.cpp \
     Emulator/EmulatorSettingsReader.cpp \
     Emulator/EmulatorCore.cpp \
     Emulator/EmulatorServices.cpp \
-    filebrowser.cpp \
     AppSettings/applicationsettings.cpp
 
 # Installation path
@@ -28,7 +27,6 @@ HEADERS += \
     Emulator/EmulatorSettingsReader.h \
     Emulator/EmulatorCore.h \
     Emulator/EmulatorServices.h \
-    filebrowser.h \
     AppSettings/applicationsettings.h
 
 OTHER_FILES +=

@@ -1,5 +1,14 @@
 import QtQuick 2.0
-
+/******************************************************************************
+* Author Jack Sanchez
+* Contributers Jack Sanchez, Aaron Lindber & Eli Kloft
+* Overview *
+* Notice that you have to double enter to even select a category, this is how
+* jack thought navigation works... So broken to say the least.
+* Aaron Lindberg and Eli Kloft want no credit to this because of the Ui
+* attrocity that it is. The lack of comments adhears to the vapor coding
+* standard.
+******************************************************************************/
 //must set size from parent object
 VaporRectangle
 {
@@ -43,10 +52,9 @@ VaporRectangle
 			event.accepted = true;
 		}
 		else if (event.key == Qt.Key_Backspace)
-		{
-			appSettingsContainer.visible = false;
+        {
 			appSettingsContainer.focus = false;
-			settingsContainer.setDefaultFocus("app");
+            settingsContainer.setDefaultFocus();
 			event.accepted = true;
 		}
 	}

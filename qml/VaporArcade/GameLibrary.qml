@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import "Database"
+
 GridView {
     id:gameLibrary
     //property ListModel emuList:vaporDbGameList.emuList
@@ -11,10 +12,11 @@ GridView {
     highlightRangeMode:GridView.ApplyRange
     width: parent.width
     height: ScreenHeight/3
+    //signal emmitted when the currently selected game changes
     signal selectedChanged(string name, string path, string desc, string disp, string sysFull, string sysAbbr, string sysPic, var sysID)
     //interactive: false
-
-    Component {
+    //the delegate for the gridview
+    Component {//describes how to display each element in the List model on the Gridview
         id: gameDelegate
         VaporRectangle {
             id: wrapper
@@ -24,7 +26,6 @@ GridView {
                     gameLibrary.selectedChanged(name,path,desc,display,sysFull,sysAbbr,sysPic,sysID);
                 }
             }
-
             radius: width/16
             width: gameLibrary.cellWidth*15/16
             height: gameLibrary.cellHeight*15/16
@@ -35,15 +36,16 @@ GridView {
                 GradientStop { position: 1.0; color: vaporTheme.mid }
             }
             Text
-            {
+            {//the game name
                 id: romTxt
                 text: name
                 color: (wrapper.focus?vaporTheme.shadow:vaporTheme.text)
                 anchors.centerIn: parent
                 z:parent.z + 20
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
             Image
-            {
+            {//the cover image
                 id:cover
                 anchors.fill: wrapper
                 source: display
@@ -51,7 +53,7 @@ GridView {
             }
 
         }
-    }
+    }//the list model and delegate to use
     model: vaporDbListModels.gameRomList
     delegate: gameDelegate
     focus: true

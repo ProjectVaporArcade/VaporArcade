@@ -3,51 +3,70 @@ import "VaporDatabase.js" as VaporDB
 import "RomDatabaseProxy.js" as RomProxy
 import "EmulatorDatabaseProxy.js" as EmulatorProxy
 import "MediaDatabaseProxy.js" as MediaProxy
-
+/******************************************************************************
+*Author Aaron Lindberg
+*Contributers Eli Kloft & Aaron Lindberg
+*** Overview ***
+* Entry point into the database, manages all of the data lists obtained from
+* the database
+******************************************************************************/
 Item
 {
+    //expose List models to hold data from the database to display in UI
     property ListModel gameTitleDataList: gameTitleDataListModel
     property ListModel gameTitleNameList: gameTitleNameListModel
+
     property ListModel gameRomList: romDataListModel
+
     property ListModel emulatorNameList: emulatorNameListModel
     property ListModel emulatorDataList: emulatorDataListModel
+
     property ListModel gameSystemNameList: gameSystemNameListModel
     property ListModel gameSystemDataList: gameSystemDataListModel
+
     property ListModel mediaTypeDataList: mediaTypeDataListModel
+
     property ListModel mediaTypeNameList: mediaTypeNameListModel
     property ListModel romMediaDataList: romMediaDataListModel
+    //when instanciated initialize the ListModels
     Component.onCompleted:
     {
         VaporDB.initialize();
+        //test inserts into the database
         testInserts();
+
         selectAllGameTitles()
         selectAllGameSystems()
         //
     }
+    //Tests inserts for the database
     function testInserts()
     {
         try{
+            //game title
         insertGameTitle("Mario")
-
+            //game systems
         insertGameSystem("Calculator","Calc","")//1
         insertGameSystem("Nintendo 64","N64","")//2
         insertGameSystem("Super Nintendo Entertainment System","SNES","/Dropbox/OIT Shared Files/VaporArcade/Emulators/SNES/SNES.png")//3
         insertGameSystem("Nintendo Entertainment System","NES","")//4
-
+            //emulator systems
         insertEmulator(3,"ZSNES","/Users/Aaron Lindberg/config/VaporArcade/Emulators/SNES/zsnes.py")//1
         insertEmulator(4,"JNES","/Users/Aaron Lindberg/config/VaporArcade/Emulators/NES/jnes.py")//2
         insertEmulator(1,"CALC","/Users/Aaron Lindberg/config/VaporArcade/Emulators/CALC/CALC.py")//3
-
+            //media types
         insertMediaType("COVER");//1
-
+            //Rom Records
         insertRomRecord(1,"Super Mario Bros. 3", "nes Mario Game... Play me Meow.",4,"C:\\Dropbox\\OIT Shared Files\\VaporArcade\\Roms\\Super Mario Bros 3.zip")//1
         insertRomRecord(1,"Super Mario World", "sNes Mario Game... Play me Meow.",3,"C:\\Dropbox\\OIT Shared Files\\VaporArcade\\Roms\\Super Mario World.smc")//2
         insertRomRecord(1,"Romancing Saga 3","Romancing Saga 3",3,'C:\\Users\\Aaron Lindberg\\Downloads\\Romancing Saga 3.smc')
-        insertMedia(1,1,"")
+            //dummy medias
+            insertMedia(1,1,"")
         }catch(e){}
     }
 
     id: vaporDatabaseListModels
+
     ListModel
     {
         id: gameTitleDataListModel
@@ -173,7 +192,7 @@ Item
     {
         RomProxy.refreshAllGames(romDataListModel)
     }
-    //Media
+    //Rom Medias
     function insertMedia(RomID, TypeID, MediaName)
     {
         MediaProxy.insertRomMedia(RomID,TypeID,MediaName)
@@ -198,7 +217,7 @@ Item
     {
 
     }
-
+    //media types
     function insertMediaType(type)
     {
         MediaProxy.insertMediaType(type)

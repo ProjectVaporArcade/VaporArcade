@@ -37,10 +37,7 @@ signals:
     void emulatorError(QString errorMsg);
     //void emulatorFailedToStart(QString executable, QString game);
     void emulatorStart(QString executablePath, QString romPath);
-    void MultipleEmulatorsFound(QStringList emuList);
-    void NoEmulatorsFound(QString directory);
-    void SettingsLoaded(SettingsHash hash);
-    void SettingsSaved();
+
 public slots:
     //void emulatorFailedToStartSlot(const QString executable, const QString game);
     void emulatorStartedSlot(QString exe, QString game);

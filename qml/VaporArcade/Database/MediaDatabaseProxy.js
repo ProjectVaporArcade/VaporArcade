@@ -1,5 +1,11 @@
 .import QtQuick.LocalStorage 2.0 as Sql
 .import "VaporDatabase.js" as VaporDB
+/******************************************************************************
+*Author Aaron Lindberg
+*Contributers Eli Kloft & Aaron Lindberg
+*** Overview ***
+* Manages the media related database transactions.
+******************************************************************************/
 function insertMediaType( type )
 {
     VaporDB.getDatabase().transaction(

@@ -1,10 +1,14 @@
 import QtQuick 2.0
 import com.vapor.project 1.0
-
+/******************************************************************************
+*Author Aaron Lindberg
+*Contributers Eli Kloft & Aaron Lindberg
+* shows messages about starting a emulator with a rom.
+******************************************************************************/
 VaporRectangle {
     id: activeGameDialog
-    property var error: false
-    property var started: false;
+    property bool error: false
+    property bool started: false;
     property var returnObj: parent
     property string gamePlaying: ""
     visible: false

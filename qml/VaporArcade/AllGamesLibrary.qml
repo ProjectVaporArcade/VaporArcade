@@ -1,6 +1,11 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
-//import "vapordb.js" as VaporStorage
+/******************************************************************************
+* Author Aaron Lindberg
+* Overview *
+* shows the user all the roms in the library, allows the user to select a rom
+* and emulator to play it with
+******************************************************************************/
 VaporRectangle {
     id: allGamesLibrary
     width: homescreen.width
@@ -8,7 +13,7 @@ VaporRectangle {
     color: vaporTheme.shadow
     visible: false
     z: parent.z + 1
-
+//sets the element to give focus to.
     function setDefaultFocus()
     {
         vaporDbListModels.selectAllRomRecords();
@@ -16,12 +21,14 @@ VaporRectangle {
         gameLibrary.focus = true;
 
     }
+    //returns focus to the last menu
     function leaveFocus()
     {
         allGameLibrary.visible = false;
         gameLibrary.focus = false;
         gamesContainer.setDefaultFocus();
     }
+    //make an instance of the game library
     GameLibrary
     {
         id:gameLibrary
@@ -38,7 +45,8 @@ VaporRectangle {
         anchors.bottom: gameDescRect.top
         anchors.margins: ScreenHeight/18
         height: ScreenHeight/3
-        z:parent.z + 1  
+        z:parent.z + 1
+        //update when the selected game changes
         onSelectedChanged:
         {
             var tmp = "";
@@ -63,6 +71,7 @@ VaporRectangle {
             systemID = sysID
         }
     }
+    //Show the curent selected game's description
     VaporRectangle
     {
         id: gameDescRect
@@ -89,9 +98,11 @@ VaporRectangle {
             font.pixelSize: width/41
             anchors.margins: parent.height/16
             color: vaporTheme.text
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             text:gameLibrary.gameDesc
         }
     }
+//selected game's system dichotomy
     VaporRectangle{
         id:systemRect
         Text
@@ -103,6 +114,7 @@ VaporRectangle {
             anchors.top: parent.top
             text:gameLibrary.systemAbbrName
             font.pixelSize: height//width/text.length
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             color: vaporTheme.text
         }
         Image
@@ -116,7 +128,7 @@ VaporRectangle {
             source: gameLibrary.systemPic
         }
         ComboBox
-        {
+        {//supported emulators drop down
             id:emuComboBox
             model: vaporDbListModels.emulatorNameList
             anchors.top: systemRectTxt.bottom
@@ -135,7 +147,7 @@ VaporRectangle {
             GradientStop { position: 0.3; color: vaporTheme.midlight }
             GradientStop { position: 1.0; color: vaporTheme.mid }
         }
-    }
+    }//the rom cover art and name
     VaporRectangle
     {
         id: gameCoverRect
@@ -155,6 +167,7 @@ VaporRectangle {
             color:vaporTheme.text
             anchors.horizontalCenter: parent.horizontalCenter
             text:gameLibrary.gameName
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }
         radius: height/16
         gradient: Gradient
@@ -179,6 +192,7 @@ VaporRectangle {
         opacity: 0.1
         anchors.centerIn: parent
     }
+    //game playing information popup
     PlayingGame
     {
         id: activeGame
@@ -190,6 +204,7 @@ VaporRectangle {
     {
         activeGame.startedRun = false;
     }
+//key navigation
     Keys.onPressed:
     {
 

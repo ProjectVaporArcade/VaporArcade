@@ -1,6 +1,11 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.0
+/******************************************************************************
+*Author Aaron Lindberg
+*Contributers Eli Kloft & Aaron Lindberg
+* Checkbox control, Vapor Style
+******************************************************************************/
 CheckBox {
         id:checkbox
         property string checkboxTitle:"Check Box"

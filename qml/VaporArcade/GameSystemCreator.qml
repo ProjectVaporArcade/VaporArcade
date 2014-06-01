@@ -1,5 +1,8 @@
 import QtQuick 2.0
-
+/******************************************************************************
+*Author Aaron Lindberg
+*Contributers Aaron Lindberg
+******************************************************************************/
 VaporRectangle {
     implicitWidth: 100
     implicitHeight: 62
