@@ -123,12 +123,15 @@ function refreshAllGames(gameList)
     VaporDB.getDatabase().transaction(
     function (tx)
     {
+        //empty the gameList
         gameList.clear();
+        //select all games from the database and populate the gameList
         res = tx.executeSql('SELECT RR.ROM_ID, ROM_Name, RomPath, MediaName, Description, S.SystemName, S.AbbrName, S.SystemPic, S.SystemID FROM ROM_Records AS RR LEFT OUTER JOIN (SELECT ROM_ID, MediaName FROM ROM_Media AS RM LEFT OUTER JOIN MediaTypes AS MT ON MT.TypeID = RM.TypeID WHERE TypeName = "COVER") AS RRM ON RR.ROM_ID = RRM.ROM_ID JOIN GameSystem AS S ON RR.SystemID = S.SystemID;');
         var qLen=res.rows.length
         for(var i = 0; i < res.rows.length; ++i)
-        {
+        {//Get a record from the query's result
             var itm=res.rows.item(i)
+            //extract the data from the query
             var RomName=itm.ROM_Name;
             var RomPath=itm.RomPath;
             var Desc=itm.Description
@@ -137,8 +140,16 @@ function refreshAllGames(gameList)
             var sysFull=itm.SystemName;
             var sPic=itm.SystemPic;
             var sysID=itm.SystemID
-            console.debug(RomName + ":" + Disp + ":" + sys)
-            gameList.append({"name":RomName, "path":RomPath, "desc":Desc, "display":Disp, "sysFull":sysFull, "sysAbbr":sys, "sysPic":sPic, "sysID":sysID})
+            //fill the gameList with the data
+            gameList.append(
+                            {"name":RomName,
+                            "path":RomPath,
+                            "desc":Desc,
+                            "display":Disp,
+                            "sysFull":sysFull,
+                            "sysAbbr":sys,
+                            "sysPic":sPic,
+                            "sysID":sysID})
         }
     });
     return res;

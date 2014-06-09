@@ -10,7 +10,7 @@
 * Returns the database connection
 ******************************************************************************/
 function getDatabase()
-{
+{   //return the connection string object
      return Sql.LocalStorage.openDatabaseSync("VaporArcade", "1.0", "database for storing paths for rom library cover art.", 100000);
 }
 /******************************************************************************
@@ -20,7 +20,7 @@ function getDatabase()
 function initialize()
 {
     //creates database tables if they do not already exist
-    //initialize game dichotomy and emulator systems table
+    //initialize game system typing for emulator systems table
     initializeGameSystemTable();
     initializeEmulatorSystemTable();
 
